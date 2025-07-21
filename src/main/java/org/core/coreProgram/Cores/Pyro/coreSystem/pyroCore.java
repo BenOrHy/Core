@@ -102,8 +102,8 @@ public class pyroCore extends absCore {
     @Override
     protected boolean isQCondition(Player player, ItemStack droppedItem) {
         ItemStack off = player.getInventory().getItemInOffHand();
-        return droppedItem.getType() == Material.ECHO_SHARD &&
-                off.getType() == Material.AIR &&
+        return droppedItem.getType() == Material.BLAZE_ROD &&
+                off.getType() == Material.BLAZE_POWDER &&
                 canUseQSkill(player);
     }
 
