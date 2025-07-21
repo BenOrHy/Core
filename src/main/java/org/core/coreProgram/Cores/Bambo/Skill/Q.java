@@ -35,9 +35,9 @@ public class Q implements SkillBase {
         player.getWorld().spawnParticle(Particle.EXPLOSION, player.getLocation().add(0, 1, 0), 4, 0.3, 0.3, 0.3, 1);
 
         Vector upward = new Vector(0, config.q_Skill_Jump, 0);
-        Vector upward2 = new Vector(0, config.q_Skill_Jump / 2, 0);
+        Vector upward2 = new Vector(0, config.q_Skill_Jump * ((double) 3 /4), 0);
 
-        for (Entity entity : world.getNearbyEntities(player.getLocation(), 3, 3, 3)) {
+        for (Entity entity : world.getNearbyEntities(player.getLocation(), 4, 4, 4)) {
             if (entity.equals(player) || !(entity instanceof LivingEntity)) continue;
 
             entity.setVelocity(upward2);
