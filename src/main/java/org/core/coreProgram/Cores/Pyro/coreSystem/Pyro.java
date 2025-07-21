@@ -1,11 +1,8 @@
 package org.core.coreProgram.Cores.Pyro.coreSystem;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.UUID;
 
 public class Pyro {
@@ -20,16 +17,23 @@ public class Pyro {
     //passive
 
     //R
-    public double r_Skill_damage = 10;
-    public long r_Skill_Cool = 4000;
+    public double r_Skill_damage = 7;
+    public long r_Skill_Cool = 10000;
+    public double r_Object_Height = 7;
+    public double r_Object_Wide = 1;
 
     //Q
-    public double q_Skill_Damage = 8;
-    public long q_Skill_Cool = 8000;
+    public double q_Skill_Damage = 5;
+    public long q_Skill_Cool = 10000;
+    public double q_Skill_Range = 5;
 
     //F
-    public double f_Skill_Damage = 4;
-    public long f_Skill_Cool = 0;
+    public double f_Skill_Damage = 40;
+    public long f_Skill_Cool = 80000;
+    public double hpDownPercent = 25;
+    public double atkDownPercent = 25;
+    public double dffDownPercent = 25;
+    public double spdDownPercent = 50;
 
 
     public void variableReset(Player player){
