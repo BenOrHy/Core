@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Frost implements Debuffs{
-    private static final Map<Entity, Long> frostedEntities = new HashMap();
+    private static final Map<Entity, Long> frostbiteEntities = new HashMap();
 
     private final Entity target;
     private final long duration;
@@ -32,7 +32,7 @@ public class Frost implements Debuffs{
         new BukkitRunnable() {
             @Override
             public void run() {
-                frostedEntities.put(target, endTime);
+                frostbiteEntities.put(target, endTime);
 
                 entity.setFreezeTicks(20);
 
@@ -46,11 +46,11 @@ public class Frost implements Debuffs{
 
     @Override
     public void removeEffect(Entity entity) {
-        frostedEntities.remove(entity);
+        frostbiteEntities.remove(entity);
     }
 
     public static boolean isFrostbite(Entity entity) {
-        Long endTime = frostedEntities.get(entity);
+        Long endTime = frostbiteEntities.get(entity);
         return endTime != null && System.currentTimeMillis() < endTime;
     }
 

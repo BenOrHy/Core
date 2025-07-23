@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -18,6 +19,8 @@ public class Pyro {
     public long frozenCool = 10000;
 
     //passive
+    public HashMap<UUID, Boolean> collision = new HashMap<>();
+
     public LinkedHashMap<UUID, Integer> causalgia = new LinkedHashMap<>();
     public long coolCausalgia = 7000;
     public long burnCoolExtends = 3000;
@@ -34,7 +37,6 @@ public class Pyro {
     public double q_Skill_Damage = 5;
     public long q_Skill_Cool = 10000;
     public double q_Skill_Range = 5;
-
 
     //F
     public double f_Skill_Damage = 40;

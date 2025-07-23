@@ -95,6 +95,10 @@ public class dagCore extends absCore {
 
             if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
 
+                if(!hasProperItems(player)){
+                    return;
+                }
+
                 config.f_damaged.put(player.getUniqueId(), new HashSet<>());
 
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
