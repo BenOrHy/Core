@@ -5,6 +5,8 @@ import org.core.Cool.Cool;
 import org.core.Effect.EffectManager;
 import org.core.coreConfig;
 import org.core.coreProgram.Cores.Pyro.coreSystem.Pyro;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class Causalgia {
 
@@ -19,6 +21,14 @@ public class Causalgia {
         this.config = config;
         this.plugin = plugin;
         this.cool = cool;
+    }
+
+    public void addCausalgia(Player player, Entity entity){
+        config.causalgia.put(entity.getUniqueId(), 1);
+    }
+
+    public void handleCausalgia(){
+
     }
 
 }

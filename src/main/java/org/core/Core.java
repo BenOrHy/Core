@@ -24,6 +24,8 @@ import org.core.coreProgram.Cores.Carpenter.coreSystem.Carpenter;
 import org.core.coreProgram.Cores.Carpenter.coreSystem.carpCore;
 import org.core.coreProgram.Cores.Dagger.coreSystem.Dagger;
 import org.core.coreProgram.Cores.Dagger.coreSystem.dagCore;
+import org.core.coreProgram.Cores.Pyro.coreSystem.Pyro;
+import org.core.coreProgram.Cores.Pyro.coreSystem.pyroCore;
 
 public final class Core extends JavaPlugin {
 
@@ -35,6 +37,7 @@ public final class Core extends JavaPlugin {
     private bambCore bamb;
     private carpCore carp;
     private dagCore dag;
+    private pyroCore pyro;
 
     public static Core getInstance() {
         return instance;
@@ -51,6 +54,7 @@ public final class Core extends JavaPlugin {
         Bambo bambConfig = new Bambo();
         Carpenter carpConfig = new Carpenter();
         Dagger dagConfig = new Dagger();
+        Pyro pyroConfig = new Pyro();
 
         Cool cool = new Cool(this);
 
@@ -70,6 +74,9 @@ public final class Core extends JavaPlugin {
 
         this.dag = new dagCore(this, this.config, dagConfig, cool);
         Bukkit.getPluginManager().registerEvents(this.dag, this);
+
+        this.pyro = new pyroCore(this, config, pyroConfig, cool);
+        Bukkit.getPluginManager().registerEvents(this.pyro, this);
 
         getLogger().info("Cores downloaded!");
     }

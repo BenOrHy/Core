@@ -1,8 +1,11 @@
 package org.core.coreProgram.Cores.Pyro.coreSystem;
 
+import net.kyori.adventure.text.event.ClickEvent;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public class Pyro {
@@ -15,10 +18,15 @@ public class Pyro {
     public long frozenCool = 10000;
 
     //passive
+    public LinkedHashMap<UUID, Integer> causalgia = new LinkedHashMap<>();
+    public long coolCausalgia = 7000;
+    public long burnCoolExtends = 3000;
+    public double burnDownStats = 0.7;
 
     //R
     public double r_Skill_damage = 7;
     public long r_Skill_Cool = 10000;
+    public double r_Skill_range = 7;
     public double r_Object_Height = 7;
     public double r_Object_Wide = 1;
 
@@ -26,6 +34,7 @@ public class Pyro {
     public double q_Skill_Damage = 5;
     public long q_Skill_Cool = 10000;
     public double q_Skill_Range = 5;
+
 
     //F
     public double f_Skill_Damage = 40;
