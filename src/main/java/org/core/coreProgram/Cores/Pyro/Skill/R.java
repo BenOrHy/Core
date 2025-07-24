@@ -1,10 +1,28 @@
 package org.core.coreProgram.Cores.Pyro.Skill;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.*;
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 import org.core.Cool.Cool;
+import org.core.Debuff.Burn;
+import org.core.Effect.ForceDamage;
+import org.core.Effect.Grounding;
+import org.core.Effect.Stun;
 import org.core.coreProgram.Abs.SkillBase;
 import org.core.coreProgram.Cores.Pyro.coreSystem.Pyro;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class R implements SkillBase {
 
@@ -21,6 +39,119 @@ public class R implements SkillBase {
     @Override
     public void Trigger(Player player){
 
+        player.swingOffHand();
+
+        World world = player.getWorld();
+
+        Entity entity = getTargetedEntity(player, 17, 0.3);
+
+        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(30, 30, 30), 1.0f);
+        world.spawnParticle(Particle.DUST, player.getLocation().add(0, 0.6, 0), 220, 3, 0, 3, 0, dustOptions);
+
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.0f);
+        player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
+
+        if(entity != null){
+
+            initiate(player, entity.getLocation(), 60);
+
+        }
+
     }
 
+    public void initiate(Player player, Location initiateLoc, int time){
+
+        World world = player.getWorld();
+
+        new BukkitRunnable() {
+            int tick = 0;
+
+            @Override
+            public void run() {
+                if (tick > 15) {
+                    firePoll(player, initiateLoc, time);
+                    this.cancel();
+                    return;
+                }
+
+                world.spawnParticle(Particle.FLAME, initiateLoc.add(0, 0.2, 0), 14, 0.5, 0.5, 0.5, 0);
+
+                tick++;
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
+    }
+
+    public void firePoll(Player player, Location initiateLoc, int time){
+
+        World world = player.getWorld();
+
+        player.getWorld().playSound(initiateLoc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
+        player.getWorld().playSound(initiateLoc, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+
+        for (Entity entity : world.getNearbyEntities(initiateLoc, 1, 6, 1)) {
+            if (entity instanceof LivingEntity target && entity != player) {
+
+                ForceDamage forceDamage = new ForceDamage(target, config.r_Skill_Damage);
+                forceDamage.applyEffect(player);
+
+                Stun stun = new Stun(target, config.r_Skill_stun);
+                stun.applyEffect(player);
+
+            }
+        }
+
+        new BukkitRunnable() {
+            int tick = 0;
+
+            @Override
+            public void run() {
+                if (tick > time) {
+                    this.cancel();
+                    return;
+                }
+                for(int i = 0; i < 77; i++){
+                    world.spawnParticle(Particle.FLAME, initiateLoc.add(0, ((double) i) / 10, 0), 1, 0.1, 0.1, 0.1, 0);
+                }
+
+                if(tick % 20 == 0) {
+                    player.spawnParticle(Particle.FLAME, initiateLoc, 14, 0.1, 0.1, 0.1, 0.4);
+                    player.spawnParticle(Particle.SOUL_FIRE_FLAME, initiateLoc, 7, 0.1, 0.1, 0.1, 0.3);
+                    for (Entity entity : world.getNearbyEntities(initiateLoc, 3, 10, 3)) {
+                        if (entity instanceof LivingEntity target && entity != player) {
+
+                            Burn burn = new Burn(target, 2000L);
+                            burn.applyEffect(player);
+
+                        }
+                    }
+                }
+
+                tick++;
+            }
+        }.runTaskTimer(plugin, 0L, 2L);
+    }
+
+    public static LivingEntity getTargetedEntity(Player player, double range, double raySize) {
+        World world = player.getWorld();
+        Location eyeLocation = player.getEyeLocation();
+        Vector direction = eyeLocation.getDirection();
+
+        List<LivingEntity> candidates = new ArrayList<>();
+
+        for (Entity entity : world.getNearbyEntities(eyeLocation, range, range, range)) {
+            if (!(entity instanceof LivingEntity) || entity.equals(player)) continue;
+
+            RayTraceResult result = world.rayTraceEntities(
+                    eyeLocation, direction, range, raySize, e -> e.equals(entity)
+            );
+
+            if (result != null) {
+                candidates.add((LivingEntity) entity);
+            }
+        }
+
+        return candidates.stream()
+                .min(Comparator.comparingDouble(Damageable::getHealth))
+                .orElse(null);
+    }
 }

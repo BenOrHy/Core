@@ -76,12 +76,21 @@ public class pyroCore extends absCore {
 
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
 
+            if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK){
+                return;
+            }
+
+            if(cool.isReloading(player, "flame")){
+                player.playSound(player.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
+                return;
+            }
+
             if(!hasProperItems(player)){
                 player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
                 return;
             }
 
-            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(2.0);
+            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(0.5);
 
             player.playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1, 1);
             event.setCancelled(true);
@@ -93,18 +102,18 @@ public class pyroCore extends absCore {
 
                 @Override
                 public void run() {
-                    if (ticks >= 7 || config.collision.getOrDefault(player.getUniqueId(), true)) {
+                    if (ticks >= 10 || config.collision.getOrDefault(player.getUniqueId(), true)) {
                         config.collision.remove(player.getUniqueId());
                         this.cancel();
                         return;
                     }
 
                     Location particleLocation = playerLocation.clone()
-                            .add(direction.clone().multiply(ticks * 1.8))
+                            .add(direction.clone().multiply(ticks * 1.5))
                             .add(0, 1.4, 0);
 
-                    player.spawnParticle(Particle.FLAME, particleLocation, 1, 0, 0, 0, 0);
-                    player.spawnParticle(Particle.SMOKE, particleLocation, 1, 0, 0, 0, 0);
+                    player.spawnParticle(Particle.FLAME, particleLocation, 3, 0.1, 0.1, 0.1, 0);
+                    player.spawnParticle(Particle.SMOKE, particleLocation, 2, 0.1, 0.1, 0.1, 0);
 
                     for (Entity entity : world.getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
                         if (entity instanceof LivingEntity target && entity != player) {
@@ -120,7 +129,7 @@ public class pyroCore extends absCore {
                 }
             }.runTaskTimer(plugin, 0L, 1L);
 
-            cool.setCooldown(player, 1000L, "flame");
+            cool.setCooldown(player, 2000L, "flame");
         }
     }
 
@@ -129,22 +138,22 @@ public class pyroCore extends absCore {
         World world = player.getWorld();
 
         player.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
-        player.spawnParticle(Particle.FLAME, burstLoction, 21, 0.1, 0.1, 0.1, 0.6);
-        player.spawnParticle(Particle.SOUL_FIRE_FLAME, burstLoction, 14, 0.1, 0.1, 0.1, 0.5);
+        player.spawnParticle(Particle.FLAME, burstLoction, 21, 0.1, 0.1, 0.1, 0.9);
+        player.spawnParticle(Particle.SOUL_FIRE_FLAME, burstLoction, 14, 0.1, 0.1, 0.1, 0.9);
 
         for (Entity entity : world.getNearbyEntities(burstLoction, 3, 3, 3)) {
             if (entity instanceof LivingEntity target && entity != player) {
 
-                ForceDamage forceDamage = new ForceDamage(target, config.f_Skill_Damage);
+                ForceDamage forceDamage = new ForceDamage(target, 9);
                 forceDamage.applyEffect(player);
 
                 if (Math.random() < 0.3) {
-                    Burn burn = new Burn(entity, 7000L);
+                    Burn burn = new Burn(target, 7000L);
                     burn.applyEffect(player);
                 }
 
                 Vector direction = entity.getLocation().toVector().subtract(burstLoction.toVector()).normalize().multiply(0.5);
-                direction.setY(0.3);
+                direction.setY(0.5);
 
             }
         }

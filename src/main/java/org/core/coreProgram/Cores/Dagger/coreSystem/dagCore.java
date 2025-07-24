@@ -95,6 +95,10 @@ public class dagCore extends absCore {
 
             if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
 
+                if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK){
+                    return;
+                }
+
                 if(!hasProperItems(player)){
                     return;
                 }

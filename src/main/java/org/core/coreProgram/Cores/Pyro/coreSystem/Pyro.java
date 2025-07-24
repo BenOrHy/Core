@@ -27,14 +27,14 @@ public class Pyro {
     public double burnDownStats = 0.7;
 
     //R
-    public double r_Skill_damage = 7;
+    public double r_Skill_Damage = 1;
     public long r_Skill_Cool = 10000;
-    public double r_Skill_range = 7;
-    public double r_Object_Height = 7;
-    public double r_Object_Wide = 1;
+    public long r_Skill_stun = 3000;
+    public double r_Skill_Burn_range = 3;
+    public double r_Skill_range = 17;
 
     //Q
-    public double q_Skill_Damage = 5;
+    public double q_Skill_Damage_Percent = 50;
     public long q_Skill_Cool = 10000;
     public double q_Skill_Range = 5;
 

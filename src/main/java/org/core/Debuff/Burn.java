@@ -34,7 +34,7 @@ public class Burn implements Debuffs{
         new BukkitRunnable() {
             @Override
             public void run() {
-                entity.setFireTicks(20);
+                target.setFireTicks(25);
                 burnedEntities.put(target, endTime);
 
                 if (System.currentTimeMillis() >= endTime) {
