@@ -39,8 +39,6 @@ public class R implements SkillBase {
     @Override
     public void Trigger(Player player){
 
-        config.skillUsing.put(player.getUniqueId(), true);
-
         player.swingMainHand();
 
         World world = player.getWorld();
@@ -59,8 +57,6 @@ public class R implements SkillBase {
             long cools = 500L;
             cool.updateCooldown(player, "R", cools);
         }
-
-        config.skillUsing.remove(player.getUniqueId());
 
     }
 

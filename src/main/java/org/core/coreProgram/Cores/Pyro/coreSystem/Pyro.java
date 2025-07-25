@@ -19,7 +19,6 @@ public class Pyro {
     public long frozenCool = 10000;
 
     //passive
-    public HashMap<UUID, Boolean> skillUsing = new HashMap<>();
     public HashMap<UUID, Boolean> collision = new HashMap<>();
 
     public LinkedHashMap<UUID, Integer> causalgia = new LinkedHashMap<>();
