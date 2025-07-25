@@ -21,5 +21,9 @@ public class Q implements SkillBase {
     @Override
     public void Trigger(Player player){
 
+        config.skillUsing.put(player.getUniqueId(), true);
+
+        config.skillUsing.remove(player.getUniqueId());
+
     }
 }

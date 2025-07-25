@@ -19,6 +19,7 @@ public class Pyro {
     public long frozenCool = 10000;
 
     //passive
+    public HashMap<UUID, Boolean> skillUsing = new HashMap<>();
     public HashMap<UUID, Boolean> collision = new HashMap<>();
 
     public LinkedHashMap<UUID, Integer> causalgia = new LinkedHashMap<>();
@@ -30,8 +31,6 @@ public class Pyro {
     public double r_Skill_Damage = 1;
     public long r_Skill_Cool = 10000;
     public long r_Skill_stun = 3000;
-    public double r_Skill_Burn_range = 3;
-    public double r_Skill_range = 17;
 
     //Q
     public double q_Skill_Damage_Percent = 50;

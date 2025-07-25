@@ -39,54 +39,65 @@ public class R implements SkillBase {
     @Override
     public void Trigger(Player player){
 
-        player.swingOffHand();
+        config.skillUsing.put(player.getUniqueId(), true);
+
+        player.swingMainHand();
 
         World world = player.getWorld();
 
         Entity entity = getTargetedEntity(player, 17, 0.3);
-
-        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(30, 30, 30), 1.0f);
-        world.spawnParticle(Particle.DUST, player.getLocation().add(0, 0.6, 0), 220, 3, 0, 3, 0, dustOptions);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.0f);
         player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
 
         if(entity != null){
 
-            initiate(player, entity.getLocation(), 60);
+            initiate(player, entity.getLocation());
 
+        }else{
+            player.playSound(player.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
+            long cools = 500L;
+            cool.updateCooldown(player, "R", cools);
         }
+
+        config.skillUsing.remove(player.getUniqueId());
 
     }
 
-    public void initiate(Player player, Location initiateLoc, int time){
+    public void initiate(Player player, Location initiateLoc){
 
         World world = player.getWorld();
+
+        Location bottom = initiateLoc.add(0, 0.2, 0);
 
         new BukkitRunnable() {
             int tick = 0;
 
             @Override
             public void run() {
-                if (tick > 15) {
-                    firePoll(player, initiateLoc, time);
+                if (tick > 20) {
+                    firePoll(player, initiateLoc);
                     this.cancel();
                     return;
                 }
 
-                world.spawnParticle(Particle.FLAME, initiateLoc.add(0, 0.2, 0), 14, 0.5, 0.5, 0.5, 0);
+                world.spawnParticle(Particle.FLAME, bottom, 1, 0.4, 0.1, 0.4, 0);
+                world.spawnParticle(Particle.SOUL_FIRE_FLAME, bottom, 1, 0.4, 0.1, 0.4, 0);
 
                 tick++;
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }
 
-    public void firePoll(Player player, Location initiateLoc, int time){
+    public void firePoll(Player player, Location initiateLoc){
 
         World world = player.getWorld();
 
         player.getWorld().playSound(initiateLoc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
         player.getWorld().playSound(initiateLoc, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+
+        player.spawnParticle(Particle.FLAME, initiateLoc, 21, 0.1, 0.1, 0.1, 0.8);
+        player.spawnParticle(Particle.SOUL_FIRE_FLAME, initiateLoc, 14, 0.1, 0.1, 0.1, 0.8);
 
         for (Entity entity : world.getNearbyEntities(initiateLoc, 1, 6, 1)) {
             if (entity instanceof LivingEntity target && entity != player) {
@@ -100,36 +111,43 @@ public class R implements SkillBase {
             }
         }
 
+        effect(player, initiateLoc);
+    }
+
+    public void effect(Player player, Location initiateLoc){
+        World world = player.getWorld();
         new BukkitRunnable() {
             int tick = 0;
 
             @Override
             public void run() {
-                if (tick > time) {
+                if (tick >= 90) {
                     this.cancel();
                     return;
                 }
-                for(int i = 0; i < 77; i++){
-                    world.spawnParticle(Particle.FLAME, initiateLoc.add(0, ((double) i) / 10, 0), 1, 0.1, 0.1, 0.1, 0);
+
+                for(int i = 0; i < 66; i++){
+                    Location particleLoc = initiateLoc.clone().add(0, i / 10.0, 0);
+                    world.spawnParticle(Particle.FLAME, particleLoc, 1, 0.1, 0.1, 0.1, 0);
                 }
 
-                if(tick % 20 == 0) {
-                    player.spawnParticle(Particle.FLAME, initiateLoc, 14, 0.1, 0.1, 0.1, 0.4);
-                    player.spawnParticle(Particle.SOUL_FIRE_FLAME, initiateLoc, 7, 0.1, 0.1, 0.1, 0.3);
-                    for (Entity entity : world.getNearbyEntities(initiateLoc, 3, 10, 3)) {
-                        if (entity instanceof LivingEntity target && entity != player) {
+                if(tick % 30 == 0) {
+                    player.spawnParticle(Particle.FLAME, initiateLoc.clone().add(0, 1, 0), 21, 0.1, 0.1, 0.1, 0.8);
+                    player.spawnParticle(Particle.SOUL_FIRE_FLAME, initiateLoc.clone().add(0, 1, 0), 14, 0.1, 0.1, 0.1, 0.8);
 
+                    for (Entity entity : world.getNearbyEntities(initiateLoc, 4, 10, 4)) {
+                        if (entity instanceof LivingEntity target && entity != player) {
                             Burn burn = new Burn(target, 2000L);
                             burn.applyEffect(player);
-
                         }
                     }
                 }
 
-                tick++;
+                tick += 2;
             }
         }.runTaskTimer(plugin, 0L, 2L);
     }
+
 
     public static LivingEntity getTargetedEntity(Player player, double range, double raySize) {
         World world = player.getWorld();
