@@ -1,13 +1,18 @@
 package org.core.coreProgram.Abs;
 
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.core.Cool.Cool;
 import org.core.coreConfig;
+
+import java.util.*;
 
 public abstract class absCore implements Listener {
 
@@ -44,47 +49,51 @@ public abstract class absCore implements Listener {
         getConfigWrapper().cooldownReset(player);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void rSkillTrigger(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
         if (!contains(player) || !isItemRequired(player)) return;
 
-        switch (event.getAction()) {
-            case RIGHT_CLICK_AIR:
-            case RIGHT_CLICK_BLOCK:
-                break;
-            default:
-                return;
+        if (event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK) {
+            if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                event.setCancelled(true);
+                if (this.cool.isReloading(player, "R") || !this.isRCondition(player)) {
+                    return;
+                }
+
+                this.cool.setCooldown(player, this.getConfigWrapper().getRcooldown(player), "R");
+                this.getRSkill().Trigger(player);
+            }
         }
-
-        event.setCancelled(true);
-
-        if (cool.isReloading(player, "R") || !isRCondition(player)) return;
-
-        cool.setCooldown(player, getConfigWrapper().getRcooldown(player), "R");
-        getRSkill().Trigger(player);
-
     }
 
-    @EventHandler
+    public static HashSet<UUID> QskillUsing = new HashSet<>();
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void qSkillTrigger(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
+
         ItemStack dropped = event.getItemDrop().getItemStack();
 
-        if (!contains(player) || !isQCondition(player, dropped)) return;;
+        if (contains(player) && isQCondition(player, dropped)) {
 
-        event.setCancelled(true);
+            event.setCancelled(true);
 
-        if (cool.isReloading(player, "Q")) return;
+            QskillUsing.add(player.getUniqueId());
 
-        cool.setCooldown(player, getConfigWrapper().getQcooldown(player), "Q");
-        getQSkill().Trigger(player);
+            if (cool.isReloading(player, "Q")) return;
 
+            cool.setCooldown(player, getConfigWrapper().getQcooldown(player), "Q");
+            getQSkill().Trigger(player);
+        }
     }
 
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void fSkillTrigger(PlayerSwapHandItemsEvent event) {
+
         Player player = event.getPlayer();
 
         if (!(contains(player) && isItemRequired(player))) return;
@@ -96,5 +105,6 @@ public abstract class absCore implements Listener {
         cool.setCooldown(player, getConfigWrapper().getFcooldown(player), "F");
         getFSkill().Trigger(player);
     }
+
 
 }

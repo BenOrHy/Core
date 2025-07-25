@@ -39,11 +39,9 @@ public class R implements SkillBase {
     @Override
     public void Trigger(Player player){
 
-        player.swingMainHand();
-
         World world = player.getWorld();
 
-        Entity entity = getTargetedEntity(player, 17, 0.3);
+        Entity entity = getTargetedEntity(player, 27, 0.3);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.0f);
         player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
@@ -54,7 +52,7 @@ public class R implements SkillBase {
 
         }else{
             player.playSound(player.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
-            long cools = 500L;
+            long cools = 1000L;
             cool.updateCooldown(player, "R", cools);
         }
 
@@ -100,6 +98,7 @@ public class R implements SkillBase {
 
                 ForceDamage forceDamage = new ForceDamage(target, config.r_Skill_Damage);
                 forceDamage.applyEffect(player);
+                target.setVelocity(new Vector(0, 0, 0));
 
                 Stun stun = new Stun(target, config.r_Skill_stun);
                 stun.applyEffect(player);
