@@ -34,26 +34,26 @@ public class R implements SkillBase {
     public void Trigger(Player player) {
         if(!config.reloaded.getOrDefault(player.getUniqueId(), false)){
 
-            config.reloaded.put(player.getUniqueId(), true);
-            player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 1, 1);
-            player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
-
-            long cools = 300L;
-
-            cool.updateCooldown(player, "R", cools);
-
             ItemStack offhandItem = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
 
-            if (offhandItem.getType() != Material.AIR) {
-                int amount = offhandItem.getAmount();
-                if (amount > 1) {
-                    offhandItem.setAmount(amount - 1);
-                } else {
-                    player.getInventory().setItem(EquipmentSlot.OFF_HAND, null);
-                }
-            }
+            if (offhandItem.getType() == Material.IRON_NUGGET && offhandItem.getAmount() >= 1) {
+                config.reloaded.put(player.getUniqueId(), true);
+                player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 1, 1);
+                player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
 
-            player.sendActionBar(Component.text("Loaded").color(NamedTextColor.GREEN));
+                long cools = 300L;
+
+                cool.updateCooldown(player, "R", cools);
+
+                player.sendActionBar(Component.text("Loaded").color(NamedTextColor.GREEN));
+
+                offhandItem.setAmount(offhandItem.getAmount() - 1);
+            }else{
+                player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
+                player.sendActionBar(Component.text("iron needed").color(NamedTextColor.RED));
+                long cools = 100L;
+                cool.updateCooldown(player, "R", cools);
+            }
 
         }else{
 

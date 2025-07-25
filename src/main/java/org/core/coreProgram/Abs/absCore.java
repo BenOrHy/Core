@@ -58,6 +58,7 @@ public abstract class absCore implements Listener {
         if (event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK) {
             if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 event.setCancelled(true);
+                QskillUsing.remove(player.getUniqueId());
                 if (this.cool.isReloading(player, "R") || !this.isRCondition(player)) {
                     return;
                 }
@@ -99,6 +100,8 @@ public abstract class absCore implements Listener {
         if (!(contains(player) && isItemRequired(player))) return;
 
         event.setCancelled(true);
+
+        QskillUsing.remove(player.getUniqueId());
 
         if (cool.isReloading(player, "F") || !isFCondition(player)) return;
 

@@ -33,7 +33,7 @@ public class Pyro {
 
     //Q
     public double q_Skill_Damage_Percent = 50;
-    public long q_Skill_Cool = 10000;
+    public long q_Skill_Cool = 17000;
     public double q_Skill_Range = 5;
 
     //F

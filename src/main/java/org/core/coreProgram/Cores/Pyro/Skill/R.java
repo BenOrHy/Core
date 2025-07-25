@@ -7,6 +7,8 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
@@ -39,20 +41,33 @@ public class R implements SkillBase {
     @Override
     public void Trigger(Player player){
 
-        World world = player.getWorld();
+        player.swingMainHand();
 
-        Entity entity = getTargetedEntity(player, 27, 0.3);
+        ItemStack offhandItem = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
 
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.0f);
-        player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
+        if (offhandItem.getType() == Material.BLAZE_POWDER && offhandItem.getAmount() >= 4) {
 
-        if(entity != null){
+            Entity entity = getTargetedEntity(player, 27, 0.3);
 
-            initiate(player, entity.getLocation());
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.0f);
+            player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
+
+            if (entity != null) {
+
+                initiate(player, entity.getLocation());
+
+                offhandItem.setAmount(offhandItem.getAmount() - 4);
+
+            } else {
+                player.playSound(player.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
+                long cools = 1000L;
+                cool.updateCooldown(player, "R", cools);
+            }
 
         }else{
             player.playSound(player.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
-            long cools = 1000L;
+            player.sendActionBar(Component.text("powder needed").color(NamedTextColor.RED));
+            long cools = 100L;
             cool.updateCooldown(player, "R", cools);
         }
 

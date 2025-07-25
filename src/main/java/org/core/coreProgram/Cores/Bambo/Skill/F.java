@@ -1,5 +1,7 @@
 package org.core.coreProgram.Cores.Bambo.Skill;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
@@ -40,7 +42,7 @@ public class F implements SkillBase {
         ItemStack offhandItem = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
         int amount = offhandItem.getAmount();
 
-        if (offhandItem.getType() != Material.AIR && amount >= 8) {
+        if (offhandItem.getType() == Material.IRON_NUGGET && amount >= 8) {
             if (config.stringCount.getOrDefault(player.getUniqueId(), 0) < 3) {
                 if (config.stringOn.contains(player.getUniqueId())) {
 
@@ -70,6 +72,7 @@ public class F implements SkillBase {
                         long cools = 100L;
                         cool.updateCooldown(player, "F", cools);
                     }else{
+
                         player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
                         long cools = 100L;
                         cool.updateCooldown(player, "F", cools);
@@ -77,6 +80,7 @@ public class F implements SkillBase {
                 }
             }
         }else {
+            player.sendActionBar(Component.text("iron needed").color(NamedTextColor.RED));
             player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
             long cools = 100L;
             cool.updateCooldown(player, "F", cools);

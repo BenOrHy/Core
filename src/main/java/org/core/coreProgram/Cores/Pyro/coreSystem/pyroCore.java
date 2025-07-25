@@ -108,8 +108,7 @@ public class pyroCore extends absCore {
                                 .add(direction.clone().multiply(ticks * 1.5))
                                 .add(0, 1.4, 0);
 
-                        player.spawnParticle(Particle.FLAME, particleLocation, 2, 0.1, 0.1, 0.1, 0);
-                        player.spawnParticle(Particle.FLAME, particleLocation, 1, 0.1, 0.1, 0.1, 0);
+                        player.spawnParticle(Particle.FLAME, particleLocation, 3, 0.1, 0.1, 0.1, 0);
                         player.spawnParticle(Particle.SMOKE, particleLocation, 2, 0.1, 0.1, 0.1, 0);
 
                         for (Entity entity : world.getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
@@ -125,9 +124,9 @@ public class pyroCore extends absCore {
                 }.runTaskTimer(plugin, 0L, 1L);
 
                 event.setCancelled(true);
-            } else {
-                player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
             }
+        }else {
+            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
         }
     }
 
