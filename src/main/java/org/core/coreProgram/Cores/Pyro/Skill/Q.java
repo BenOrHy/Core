@@ -33,8 +33,6 @@ public class Q implements SkillBase {
     @Override
     public void Trigger(Player player){
 
-        player.swingOffHand();
-
         ItemStack offhandItem = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
 
         if(offhandItem.getType() == Material.BLAZE_POWDER && offhandItem.getAmount() >= 7) {
@@ -44,12 +42,11 @@ public class Q implements SkillBase {
             player.getWorld().playSound(center, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
             player.getWorld().playSound(center, Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
 
-            player.spawnParticle(Particle.FLASH, center, 7, 0.1, 0.1, 0.1, 0.9);
+            player.spawnParticle(Particle.FLASH, center, 10, 0.3, 0.3, 0.3, 0.9);
             player.spawnParticle(Particle.END_ROD, center.clone().add(0, 1.2, 0), 70, 0.7, 0.7, 0.7, 0.7);
             player.spawnParticle(Particle.SOUL_FIRE_FLAME, center, 21, 0.1, 0.1, 0.1, 0.9);
             player.spawnParticle(Particle.FLAME, center, 21, 0.1, 0.1, 0.1, 0.9);
-            player.spawnParticle(Particle.SMALL_FLAME, center.clone().add(0, 1, 0), 200, 7, 7, 7, 0);
-            player.spawnParticle(Particle.SOUL_FIRE_FLAME, center.clone().add(0, 1, 0), 140, 7, 7, 7, 0.9);
+            player.spawnParticle(Particle.SOUL_FIRE_FLAME, center.clone().add(0, 1, 0), 140, 7, 7, 7, 0);
 
             Random random = new Random();
             int radius = 7;

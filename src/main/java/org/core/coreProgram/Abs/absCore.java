@@ -58,7 +58,11 @@ public abstract class absCore implements Listener {
         if (event.getAction() != Action.LEFT_CLICK_AIR && event.getAction() != Action.LEFT_CLICK_BLOCK) {
             if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 event.setCancelled(true);
-                QskillUsing.remove(player.getUniqueId());
+
+                if(!skillUsing.contains(player.getUniqueId())) {
+                    skillUsing.add(player.getUniqueId());
+                }
+
                 if (this.cool.isReloading(player, "R") || !this.isRCondition(player)) {
                     return;
                 }
@@ -69,10 +73,9 @@ public abstract class absCore implements Listener {
         }
     }
 
-    public static HashSet<UUID> QskillUsing = new HashSet<>();
+    public static HashSet<UUID> skillUsing = new HashSet<>();
 
-
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void qSkillTrigger(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
 
@@ -82,7 +85,9 @@ public abstract class absCore implements Listener {
 
             event.setCancelled(true);
 
-            QskillUsing.add(player.getUniqueId());
+            if(!skillUsing.contains(player.getUniqueId())) {
+                skillUsing.add(player.getUniqueId());
+            }
 
             if (cool.isReloading(player, "Q")) return;
 
@@ -90,7 +95,6 @@ public abstract class absCore implements Listener {
             getQSkill().Trigger(player);
         }
     }
-
 
     @EventHandler(priority = EventPriority.HIGH)
     public void fSkillTrigger(PlayerSwapHandItemsEvent event) {
@@ -101,7 +105,9 @@ public abstract class absCore implements Listener {
 
         event.setCancelled(true);
 
-        QskillUsing.remove(player.getUniqueId());
+        if(!skillUsing.contains(player.getUniqueId())) {
+            skillUsing.add(player.getUniqueId());
+        }
 
         if (cool.isReloading(player, "F") || !isFCondition(player)) return;
 
