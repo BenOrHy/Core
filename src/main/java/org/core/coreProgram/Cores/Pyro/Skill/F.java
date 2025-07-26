@@ -46,8 +46,6 @@ public class F implements SkillBase {
             player.addPotionEffect(slowness);
             PotionEffect fatigue = new PotionEffect(PotionEffectType.MINING_FATIGUE, 20 * 14, 2, false, true);
             player.addPotionEffect(fatigue);
-            PotionEffect nausea = new PotionEffect(PotionEffectType.NAUSEA, 20 * 3, 2, false, true);
-            player.addPotionEffect(nausea);
 
 
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);

@@ -37,7 +37,7 @@ public class Pyro {
     public double q_Skill_Range = 5;
 
     //F
-    public long f_Skill_Cool = 80000;
+    public long f_Skill_Cool = 100000;
     public HashMap<UUID, Boolean> F_collision = new HashMap<>();
 
     public void variableReset(Player player){
