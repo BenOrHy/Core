@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.core.Cool.Cool;
@@ -38,6 +40,15 @@ public class F implements SkillBase {
         ItemStack offhandItem = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
 
         if(offhandItem.getType() == Material.BLAZE_POWDER && offhandItem.getAmount() >= 20) {
+
+            player.damage(player.getHealth() / 2);
+            PotionEffect slowness = new PotionEffect(PotionEffectType.SLOWNESS, 20 * 14, 3, false, true);
+            player.addPotionEffect(slowness);
+            PotionEffect fatigue = new PotionEffect(PotionEffectType.MINING_FATIGUE, 20 * 14, 2, false, true);
+            player.addPotionEffect(fatigue);
+            PotionEffect nausea = new PotionEffect(PotionEffectType.NAUSEA, 20 * 3, 2, false, true);
+            player.addPotionEffect(nausea);
+
 
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
             player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 1);
@@ -128,7 +139,7 @@ public class F implements SkillBase {
         player.spawnParticle(Particle.FLAME, burstLoction, 70, 0.1, 0.1, 0.1, 0.9);
         player.spawnParticle(Particle.FLASH, burstLoction, 10, 0.3, 0.3, 0.3, 0.9);
         player.spawnParticle(Particle.END_ROD, burstLoction.clone().add(0, 1.2, 0), 70, 0.7, 0.7, 0.7, 0.7);
-        player.spawnParticle(Particle.TOTEM_OF_UNDYING, burstLoction.clone().add(0, 1.2, 0), 70, 3, 3, 3, 0.7, 0.9);
+        player.spawnParticle(Particle.TOTEM_OF_UNDYING, burstLoction.clone().add(0, 1.2, 0), 70, 3, 3, 3, 0.7);
         player.spawnParticle(Particle.SOUL_FIRE_FLAME, burstLoction, 70, 0.1, 0.1, 0.1, 0.9);
         player.spawnParticle(Particle.SOUL_FIRE_FLAME, burstLoction.clone().add(0, 1, 0), 140, 7, 7, 7, 0);
 
