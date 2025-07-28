@@ -115,5 +115,10 @@ public abstract class absCore implements Listener {
         getFSkill().Trigger(player);
     }
 
+    @EventHandler(priority = EventPriority.LOW)
+    public void fSkillUsingClear(PlayerSwapHandItemsEvent event) {
+        skillUsing.remove(event.getPlayer().getUniqueId());
+    }
+
 
 }
