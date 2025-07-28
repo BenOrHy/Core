@@ -83,7 +83,7 @@ public final class Core extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(this.pyro, this);
 
         this.glacier = new glaCore(this, config, glaConfig, cool);
-        Bukkit.getPluginManager().registerEvents(this.pyro, this);
+        Bukkit.getPluginManager().registerEvents(this.glacier, this);
 
         getLogger().info("Cores downloaded!");
     }

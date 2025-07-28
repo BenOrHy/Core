@@ -53,73 +53,79 @@ public class glaCore extends absCore {
     @EventHandler(priority = EventPriority.NORMAL)
     public void passiveAttackEffect(PlayerInteractEvent event) {
 
-        if(!skillUsing.contains(event.getPlayer().getUniqueId())) {
+        if(tag.Glacier.contains(event.getPlayer())) {
+            if (!skillUsing.contains(event.getPlayer().getUniqueId())) {
 
-            Player player = event.getPlayer();
+                Player player = event.getPlayer();
 
-            if (tag.Glacier.contains(player) && hasProperItems(player)) {
-                if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                if (hasProperItems(player)) {
+                    if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
 
-                    if (cool.isReloading(player, "frost")) {
-                        player.playSound(player.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1, 1);
-                        return;
-                    }
-
-                    cool.setCooldown(player, 800L, "frost");
-
-                    World world = player.getWorld();
-                    Location playerLocation = player.getLocation();
-                    Vector direction = playerLocation.getDirection().normalize().multiply(1.3);
-
-                    player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(0.5);
-                    player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
-
-                    config.collision.put(player.getUniqueId(), false);
-
-                    new BukkitRunnable() {
-                        int ticks = 0;
-
-                        @Override
-                        public void run() {
-                            if (ticks >= 10 || config.collision.getOrDefault(player.getUniqueId(), true)) {
-                                config.collision.remove(player.getUniqueId());
-                                this.cancel();
-                                return;
-                            }
-
-                            Location particleLocation = playerLocation.clone()
-                                    .add(direction.clone().multiply(ticks * 1.5))
-                                    .add(0, 1.4, 0);
-
-                            Particle.DustOptions dustOption_snow = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
-                            player.spawnParticle(Particle.SNOWFLAKE, particleLocation, 3, 0.1, 0.1, 0.1, 0);
-                            world.spawnParticle(Particle.DUST, particleLocation, 2, 0.1, 0.1, 0.1, 0, dustOption_snow);
-
-                            for (Entity entity : world.getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
-                                if (entity instanceof LivingEntity target && entity != player) {
-                                    player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
-                                    ForceDamage forceDamage = new ForceDamage(target, 4);
-                                    if (Math.random() < 0.3) {
-                                        Frost frostbite = new Frost(target, 7000L);
-                                        frostbite.applyEffect(player);
-                                    }
-                                    forceDamage.applyEffect(player);
-                                    config.collision.put(player.getUniqueId(), true);
-                                    break;
-                                }
-                            }
-
-                            ticks++;
+                        if (cool.isReloading(player, "frost")) {
+                            player.playSound(player.getLocation(), Sound.BLOCK_GLASS_PLACE, 1, 1);
+                            return;
                         }
-                    }.runTaskTimer(plugin, 0L, 1L);
 
-                    event.setCancelled(true);
+                        cool.setCooldown(player, 800L, "frost");
+
+                        World world = player.getWorld();
+                        Location playerLocation = player.getLocation();
+                        Vector direction = playerLocation.getDirection().normalize().multiply(1.3);
+
+                        player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(1.25);
+                        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
+
+                        config.collision.put(player.getUniqueId(), false);
+
+                        new BukkitRunnable() {
+                            int ticks = 0;
+
+                            @Override
+                            public void run() {
+                                if (ticks >= 6 || config.collision.getOrDefault(player.getUniqueId(), true)) {
+                                    config.collision.remove(player.getUniqueId());
+                                    this.cancel();
+                                    return;
+                                }
+
+                                Location particleLocation = playerLocation.clone()
+                                        .add(direction.clone().multiply(ticks * 1.5))
+                                        .add(0, 1.4, 0);
+
+                                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
+                                player.spawnParticle(Particle.SNOWFLAKE, particleLocation, 3, 0.1, 0.1, 0.1, 0);
+                                player.spawnParticle(Particle.DUST, particleLocation, 2, 0.1, 0.1, 0.1, 0, dustOptions);
+
+                                for (Entity entity : world.getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
+                                    if (entity instanceof LivingEntity target && entity != player) {
+
+                                        player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1, 1);
+
+                                        ForceDamage forceDamage = new ForceDamage(target, 3);
+                                        forceDamage.applyEffect(player);
+
+                                        if (Math.random() < 0.6) {
+                                            Frost frostbite = new Frost(target, 10000L);
+                                            frostbite.applyEffect(player);
+                                        }
+
+                                        config.collision.put(player.getUniqueId(), true);
+                                        break;
+                                    }
+                                }
+
+                                ticks++;
+                            }
+                        }.runTaskTimer(plugin, 0L, 1L);
+
+                        event.setCancelled(true);
+                    }
+                } else {
+                    player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
                 }
             } else {
-                player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
+                skillUsing.remove(event.getPlayer().getUniqueId());
             }
-        } else {
-            skillUsing.remove(event.getPlayer().getUniqueId());
         }
     }
 
@@ -146,7 +152,7 @@ public class glaCore extends absCore {
     private boolean hasProperItems(Player player) {
         ItemStack main = player.getInventory().getItemInMainHand();
         ItemStack off = player.getInventory().getItemInOffHand();
-        return main.getType() == Material.BREEZE_ROD && off.getType() == Material.POWDER_SNOW_BUCKET;
+        return main.getType() == Material.BREEZE_ROD && off.getType() == Material.BLUE_ICE;
     }
 
     private boolean canUseRSkill(Player player) { return true; }
@@ -169,7 +175,7 @@ public class glaCore extends absCore {
     protected boolean isQCondition(Player player, ItemStack droppedItem) {
         ItemStack off = player.getInventory().getItemInOffHand();
         return droppedItem.getType() == Material.BREEZE_ROD &&
-                off.getType() == Material.POWDER_SNOW_BUCKET &&
+                off.getType() == Material.BLUE_ICE &&
                 canUseQSkill(player);
     }
 

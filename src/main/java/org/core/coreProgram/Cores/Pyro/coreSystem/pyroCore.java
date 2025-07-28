@@ -69,66 +69,68 @@ public class pyroCore extends absCore {
     @EventHandler(priority = EventPriority.NORMAL)
     public void passiveAttackEffect(PlayerInteractEvent event) {
 
-        if(!skillUsing.contains(event.getPlayer().getUniqueId())) {
+        if(tag.Pyro.contains(event.getPlayer())) {
+            if (!skillUsing.contains(event.getPlayer().getUniqueId())) {
 
-            Player player = event.getPlayer();
+                Player player = event.getPlayer();
 
-            if (tag.Pyro.contains(player) && hasProperItems(player)) {
-                if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                if (hasProperItems(player)) {
+                    if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
 
-                    if (cool.isReloading(player, "flame")) {
-                        player.playSound(player.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
-                        return;
-                    }
-
-                    cool.setCooldown(player, 2000L, "flame");
-
-                    World world = player.getWorld();
-                    Location playerLocation = player.getLocation();
-                    Vector direction = playerLocation.getDirection().normalize().multiply(1.3);
-
-                    player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(0.5);
-                    player.playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1, 1);
-
-                    config.collision.put(player.getUniqueId(), false);
-
-                    new BukkitRunnable() {
-                        int ticks = 0;
-
-                        @Override
-                        public void run() {
-                            if (ticks >= 10 || config.collision.getOrDefault(player.getUniqueId(), true)) {
-                                config.collision.remove(player.getUniqueId());
-                                this.cancel();
-                                return;
-                            }
-
-                            Location particleLocation = playerLocation.clone()
-                                    .add(direction.clone().multiply(ticks * 1.5))
-                                    .add(0, 1.4, 0);
-
-                            player.spawnParticle(Particle.FLAME, particleLocation, 3, 0.1, 0.1, 0.1, 0);
-                            player.spawnParticle(Particle.SMOKE, particleLocation, 2, 0.1, 0.1, 0.1, 0);
-
-                            for (Entity entity : world.getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
-                                if (entity instanceof LivingEntity target && entity != player) {
-                                    Burst(player, particleLocation);
-                                    config.collision.put(player.getUniqueId(), true);
-                                    break;
-                                }
-                            }
-
-                            ticks++;
+                        if (cool.isReloading(player, "flame")) {
+                            player.playSound(player.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 1);
+                            return;
                         }
-                    }.runTaskTimer(plugin, 0L, 1L);
 
-                    event.setCancelled(true);
+                        cool.setCooldown(player, 2000L, "flame");
+
+                        World world = player.getWorld();
+                        Location playerLocation = player.getLocation();
+                        Vector direction = playerLocation.getDirection().normalize().multiply(1.3);
+
+                        player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(0.5);
+                        player.playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1, 1);
+
+                        config.collision.put(player.getUniqueId(), false);
+
+                        new BukkitRunnable() {
+                            int ticks = 0;
+
+                            @Override
+                            public void run() {
+                                if (ticks >= 10 || config.collision.getOrDefault(player.getUniqueId(), true)) {
+                                    config.collision.remove(player.getUniqueId());
+                                    this.cancel();
+                                    return;
+                                }
+
+                                Location particleLocation = playerLocation.clone()
+                                        .add(direction.clone().multiply(ticks * 1.5))
+                                        .add(0, 1.4, 0);
+
+                                player.spawnParticle(Particle.FLAME, particleLocation, 3, 0.1, 0.1, 0.1, 0);
+                                player.spawnParticle(Particle.SMOKE, particleLocation, 2, 0.1, 0.1, 0.1, 0);
+
+                                for (Entity entity : world.getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
+                                    if (entity instanceof LivingEntity target && entity != player) {
+                                        Burst(player, particleLocation);
+                                        config.collision.put(player.getUniqueId(), true);
+                                        break;
+                                    }
+                                }
+
+                                ticks++;
+                            }
+                        }.runTaskTimer(plugin, 0L, 1L);
+
+                        event.setCancelled(true);
+                    }
+                } else {
+                    player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
                 }
             } else {
-                player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
+                skillUsing.remove(event.getPlayer().getUniqueId());
             }
-        } else {
-            skillUsing.remove(event.getPlayer().getUniqueId());
         }
     }
 

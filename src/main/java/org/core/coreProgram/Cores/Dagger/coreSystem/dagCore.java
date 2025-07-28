@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -52,6 +53,15 @@ public class dagCore extends absCore {
         this.Fskill = new F(config, plugin, cool, damagestroker);
 
         getLogger().info("Dagger downloaded...");
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void passiveAttackEffect(PlayerInteractEvent event) {
+        if(tag.Dagger.contains(event.getPlayer())){
+            if (skillUsing.contains(event.getPlayer().getUniqueId())) {
+                skillUsing.remove(event.getPlayer().getUniqueId());
+            }
+        }
     }
 
     @EventHandler

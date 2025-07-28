@@ -2,6 +2,7 @@ package org.core.Debuff;
 
 import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -34,10 +35,11 @@ public class Burn implements Debuffs{
         new BukkitRunnable() {
             @Override
             public void run() {
-                target.setFireTicks(25);
                 burnedEntities.put(target, endTime);
+                entity.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, target.getLocation().clone().add(0, 1.3, 0), 7, 0.5, 0.5, 0.5, 0);
+                target.setFireTicks(25);
 
-                if (System.currentTimeMillis() >= endTime) {
+                if (System.currentTimeMillis() >= endTime || target.isDead()) {
                     removeEffect(target);
                     cancel();
                 }

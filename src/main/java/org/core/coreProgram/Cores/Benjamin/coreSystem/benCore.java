@@ -8,9 +8,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.core.Cool.Cool;
@@ -52,6 +54,15 @@ public class benCore extends absCore {
         this.Fskill = new F(config, plugin, cool, hardSlash);
 
         getLogger().info("Benjamin downloaded...");
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void passiveAttackEffect(PlayerInteractEvent event) {
+        if(tag.Benjamin.contains(event.getPlayer())){
+            if (skillUsing.contains(event.getPlayer().getUniqueId())) {
+                skillUsing.remove(event.getPlayer().getUniqueId());
+            }
+        }
     }
 
     @EventHandler

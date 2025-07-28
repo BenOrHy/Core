@@ -5,9 +5,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.core.Cool.Cool;
@@ -47,6 +49,15 @@ public class bambCore extends absCore {
         this.Fskill = new F(config, plugin, cool);
 
         getLogger().info("Bambo downloaded...");
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void passiveAttackEffect(PlayerInteractEvent event) {
+        if(tag.Bambo.contains(event.getPlayer())){
+            if (skillUsing.contains(event.getPlayer().getUniqueId())) {
+                skillUsing.remove(event.getPlayer().getUniqueId());
+            }
+        }
     }
 
     @EventHandler

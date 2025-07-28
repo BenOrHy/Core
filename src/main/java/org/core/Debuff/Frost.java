@@ -1,6 +1,9 @@
 package org.core.Debuff;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,10 +36,15 @@ public class Frost implements Debuffs{
             @Override
             public void run() {
                 frostbiteEntities.put(target, endTime);
+                entity.getWorld().spawnParticle(Particle.SNOWFLAKE, target.getLocation().clone().add(0, 1.3, 0), 6, 0.5, 0.5, 0.5, 0);
 
-                entity.setFreezeTicks(20);
+                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
+                entity.getWorld().spawnParticle(Particle.DUST, target.getLocation().clone().add(0, 1.3, 0), 3, 0.4, 0.4, 0.4, 0, dustOptions);
 
-                if (System.currentTimeMillis() >= endTime) {
+                target.setFreezeTicks((int) endTime / 50);
+
+                if (System.currentTimeMillis() >= endTime || target.isDead()) {
+                    target.setFreezeTicks(0);
                     removeEffect(target);
                     cancel();
                 }

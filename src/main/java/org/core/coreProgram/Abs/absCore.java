@@ -49,6 +49,8 @@ public abstract class absCore implements Listener {
         getConfigWrapper().cooldownReset(player);
     }
 
+    public static HashSet<UUID> skillUsing = new HashSet<>();
+
     @EventHandler(priority = EventPriority.HIGH)
     public void rSkillTrigger(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -72,8 +74,6 @@ public abstract class absCore implements Listener {
             }
         }
     }
-
-    public static HashSet<UUID> skillUsing = new HashSet<>();
 
     @EventHandler(priority = EventPriority.HIGH)
     public void qSkillTrigger(PlayerDropItemEvent event) {
@@ -113,11 +113,6 @@ public abstract class absCore implements Listener {
 
         cool.setCooldown(player, getConfigWrapper().getFcooldown(player), "F");
         getFSkill().Trigger(player);
-    }
-
-    @EventHandler(priority = EventPriority.LOW)
-    public void fSkillUsingClear(PlayerSwapHandItemsEvent event) {
-        skillUsing.remove(event.getPlayer().getUniqueId());
     }
 
 
