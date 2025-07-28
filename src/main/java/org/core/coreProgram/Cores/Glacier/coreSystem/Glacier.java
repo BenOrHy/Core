@@ -18,14 +18,12 @@ public class Glacier {
     public HashMap<UUID, Boolean> collision = new HashMap<>();
 
     //R
-    public double r_Skill_Damage = 1;
-    public long r_Skill_Cool = 8000;
-    public long r_Skill_frost = 3000;
+    public HashMap<UUID, Boolean> Rcollision = new HashMap<>();
+    public HashMap<UUID, Boolean> entityCollision = new HashMap<>();
+    public long r_Skill_Cool = 600;
 
     //Q
-    public double q_Skill_Damage_Percent = 50;
-    public long q_Skill_Cool = 17000;
-    public double q_Skill_Range = 5;
+    public long q_Skill_Cool = 600;
 
     //F
     public long f_Skill_Cool = 100000;
