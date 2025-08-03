@@ -1,6 +1,7 @@
 package org.core;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -49,6 +50,8 @@ public class coreConfig {
     }
 
     public void clearPlayerCore(Player player){
+        player.setWalkSpeed(0.2f);
+        player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4.0);
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "setting_benjamin"), PersistentDataType.BYTE, (byte) 0);
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "setting_benzene"), PersistentDataType.BYTE, (byte) 0);
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "setting_bambo"), PersistentDataType.BYTE, (byte) 0);
