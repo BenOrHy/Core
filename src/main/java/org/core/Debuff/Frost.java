@@ -41,7 +41,7 @@ public class Frost implements Debuffs{
                 Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
                 entity.getWorld().spawnParticle(Particle.DUST, target.getLocation().clone().add(0, 1.3, 0), 3, 0.4, 0.4, 0.4, 0, dustOptions);
 
-                target.setFreezeTicks((int) endTime / 50);
+                target.setFreezeTicks((int) duration / 50);
 
                 if (System.currentTimeMillis() >= endTime || target.isDead()) {
                     target.setFreezeTicks(0);
