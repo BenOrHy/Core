@@ -8,6 +8,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -31,33 +33,44 @@ public class F implements SkillBase {
     @Override
     public void Trigger(Player player){
 
-        World world = player.getWorld();
-        Location center = player.getLocation().clone();
+        ItemStack offhandItem = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
 
-        SetBiome(world, center, 12);
+        if (offhandItem.getType() == Material.BLUE_ICE && offhandItem.getAmount() >= 20) {
+            World world = player.getWorld();
+            Location center = player.getLocation().clone();
 
-        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
-        player.spawnParticle(Particle.DUST, center.add(0, 2, 0), 1000, 8, 8, 8, 0, dustOptions);
+            SetBiome(world, center, 12);
 
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
-        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
+            Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
+            player.spawnParticle(Particle.DUST, center.add(0, 2, 0), 1000, 8, 8, 8, 0, dustOptions);
 
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BREEZE_SHOOT, 1.0f, 1.0f);
+            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
+            player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
 
-        for (Entity entity : world.getNearbyEntities(center, 4, 4, 4)) {
-            if (entity.equals(player) || !(entity instanceof LivingEntity)) continue;
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BREEZE_SHOOT, 1.0f, 1.0f);
 
-            player.spawnParticle(Particle.EXPLOSION, entity.getLocation().clone().add(0, 1, 0), 1, 0, 0, 0, 0);
+            for (Entity entity : world.getNearbyEntities(center, 4, 4, 4)) {
+                if (entity.equals(player) || !(entity instanceof LivingEntity)) continue;
 
-            Vector direction = entity.getLocation().toVector().subtract(center.toVector()).normalize().multiply(2.6);
-            direction.setY(0.6);
+                player.spawnParticle(Particle.EXPLOSION, entity.getLocation().clone().add(0, 1, 0), 1, 0, 0, 0, 0);
 
-            entity.setVelocity(direction);
+                Vector direction = entity.getLocation().toVector().subtract(center.toVector()).normalize().multiply(2.6);
+                direction.setY(0.6);
+
+                entity.setVelocity(direction);
+            }
+
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                FreezeEntity(player, center, 2);
+            }, 6);
+
+            offhandItem.setAmount(offhandItem.getAmount() - 20);
+        }else{
+            player.playSound(player.getLocation(), Sound.BLOCK_GLASS_PLACE, 1, 1);
+            player.sendActionBar(Component.text("Blue Ice needed").color(NamedTextColor.RED));
+            long cools = 100L;
+            cool.updateCooldown(player, "F", cools);
         }
-
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            FreezeEntity(player, center, 2);
-        }, 6);
 
     }
 

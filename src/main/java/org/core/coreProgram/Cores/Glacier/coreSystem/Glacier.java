@@ -23,7 +23,7 @@ public class Glacier {
     public long r_Skill_Cool = 600;
 
     //Q
-    public long q_Skill_Cool = 600;
+    public long q_Skill_Cool = 10000;
 
     //F
     public long f_Skill_Cool = 100000;
