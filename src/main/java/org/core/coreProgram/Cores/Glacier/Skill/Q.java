@@ -39,5 +39,4 @@ public class Q implements SkillBase {
     public void Trigger(Player player) {
 
     }
-
 }
