@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.core.Cool.Cool;
 import org.core.Effect.Grounding;
@@ -29,26 +30,35 @@ public class F implements SkillBase {
 
     @Override
     public void Trigger(Player player){
+
         World world = player.getWorld();
         Location center = player.getLocation().clone();
 
         SetBiome(world, center, 12);
         SetRain(world);
 
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
+        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
+        player.spawnParticle(Particle.DUST, center.add(0, 2, 0), 1000, 8, 8, 8, 0, dustOptions);
 
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
+        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
+
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BREEZE_SHOOT, 1.0f, 1.0f);
 
         for (Entity entity : world.getNearbyEntities(center, 4, 4, 4)) {
             if (entity.equals(player) || !(entity instanceof LivingEntity)) continue;
 
-            Vector direction = entity.getLocation().toVector().subtract(center.toVector()).normalize().multiply(1.5);
+            player.spawnParticle(Particle.EXPLOSION, entity.getLocation().clone().add(0, 1, 0), 1, 0, 0, 0, 0);
+
+            Vector direction = entity.getLocation().toVector().subtract(center.toVector()).normalize().multiply(2.6);
+            direction.setY(0.6);
 
             entity.setVelocity(direction);
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            FreezeEntity(player, center, 4);
-        }, 20);
+            FreezeEntity(player, center, 2);
+        }, 6);
 
     }
 
@@ -73,23 +83,29 @@ public class F implements SkillBase {
         }
     }
 
-    public void SetRain(World world){
-        boolean wasStorm = world.hasStorm();
-        boolean wasThundering = world.isThundering();
-        int prevWeatherDuration = world.getWeatherDuration();
-        int prevThunderDuration = world.getThunderDuration();
+    public void SetRain(World world) {
 
         world.setStorm(true);
         world.setThundering(false);
-        world.setWeatherDuration(20 * 60);
+        world.setWeatherDuration(20 * 30);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            world.setStorm(wasStorm);
-            world.setThundering(wasThundering);
-            world.setWeatherDuration(prevWeatherDuration);
-            world.setThunderDuration(prevThunderDuration);
-        }, 20L * 60);
+        new BukkitRunnable() {
+            int tick = 0;
+
+            @Override
+            public void run() {
+                if (tick > 20 * 30) {
+                    world.setStorm(false);
+                    world.setThundering(false);
+                    world.setWeatherDuration(1);
+                    this.cancel();
+                    return;
+                }
+                tick++;
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
     }
+
 
     public void FreezeEntity(Player player, Location center, int radius) {
         World world = player.getWorld();
@@ -112,7 +128,7 @@ public class F implements SkillBase {
 
                             Block block = world.getBlockAt(cx + x, cy + y, cz + z);
                             if (block.getType() == Material.AIR) {
-                                block.setType(Material.FROSTED_ICE);
+                                block.setType(Material.BLUE_ICE);
                             }
                         }
                     }
