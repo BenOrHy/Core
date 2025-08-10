@@ -35,7 +35,6 @@ public class F implements SkillBase {
         Location center = player.getLocation().clone();
 
         SetBiome(world, center, 12);
-        SetRain(world);
 
         Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
         player.spawnParticle(Particle.DUST, center.add(0, 2, 0), 1000, 8, 8, 8, 0, dustOptions);
@@ -82,30 +81,6 @@ public class F implements SkillBase {
             world.refreshChunk(chunkX, chunkZ);
         }
     }
-
-    public void SetRain(World world) {
-
-        world.setStorm(true);
-        world.setThundering(false);
-        world.setWeatherDuration(20 * 30);
-
-        new BukkitRunnable() {
-            int tick = 0;
-
-            @Override
-            public void run() {
-                if (tick > 20 * 30) {
-                    world.setStorm(false);
-                    world.setThundering(false);
-                    world.setWeatherDuration(1);
-                    this.cancel();
-                    return;
-                }
-                tick++;
-            }
-        }.runTaskTimer(plugin, 0L, 1L);
-    }
-
 
     public void FreezeEntity(Player player, Location center, int radius) {
         World world = player.getWorld();
