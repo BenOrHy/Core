@@ -57,6 +57,9 @@ public class F implements SkillBase {
         Location origin = player.getEyeLocation().add(0, -0.6, 0);
         Vector direction = player.getLocation().getDirection().clone().setY(0).normalize();
 
+        Particle.DustOptions dustOption_slash = new Particle.DustOptions(Color.fromRGB(66, 66, 66), 0.6f);
+        Particle.DustOptions dustOption_slash_gra = new Particle.DustOptions(Color.fromRGB(111, 111, 111), 0.6f);
+
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -102,8 +105,6 @@ public class F implements SkillBase {
                         Location particleLocation = origin.clone().add(particleOffset);
 
                         double distanceFromOrigin = particleLocation.distance(origin);
-                        Particle.DustOptions dustOption_slash = new Particle.DustOptions(Color.fromRGB(66, 66, 66), 0.6f);
-                        Particle.DustOptions dustOption_slash_gra = new Particle.DustOptions(Color.fromRGB(111, 111, 111), 0.6f);
 
                         if (distanceFromOrigin >= innerRadius) {
                             world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOption_slash_gra);
@@ -270,13 +271,8 @@ public class F implements SkillBase {
                             world.spawnParticle(Particle.DUST, particleLocation.add(0, height, 0), 1, 0, 0, 0, 0, dustOptions);
                         }
 
-                        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 0, 0), 0.6f);
                         for (Entity entity : world.getNearbyEntities(particleLocation, 1.2, 1.2, 1.2)) {
                             if (entity instanceof LivingEntity target && entity != player) {
-
-                                if(length >= innerRadius + 0.3) {
-                                    world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
-                                }
 
                                 if(!config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
 
