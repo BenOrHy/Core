@@ -138,7 +138,7 @@ public class R implements SkillBase {
                     }
 
                     if(config.entityCollision.getOrDefault(player.getUniqueId(), true)){
-                        if (block.getType() == Material.AIR) {
+                        if (block.getType() == Material.AIR || block.isPassable()) {
                             block.setType(iceType);
                         }
                     }

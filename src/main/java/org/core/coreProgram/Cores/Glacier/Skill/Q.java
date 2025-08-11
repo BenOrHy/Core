@@ -87,20 +87,41 @@ public class Q implements SkillBase {
                 double angleBetween = Math.acos(dot);
 
                 if (angleBetween <= halfAngleRad) {
-                    int targetY = -1;
+                    int foundY = -1;
                     for (int y = playerY + 2; y >= playerY - 7; y--) {
                         Block baseBlock = world.getBlockAt(x, y, z);
                         if (baseBlock.getType().isSolid() && !baseBlock.isPassable()) {
-                            targetY = y + 1;
+                            foundY = y + 1;
                             break;
                         }
                     }
-                    if (targetY == -1) continue;
 
-                    Block aboveBlock = world.getBlockAt(x, targetY, z);
+                    int foundUpperY = -1;
+                    for (int y = playerY + 1; y <= playerY + 8; y++) {
+                        Block baseBlock = world.getBlockAt(x, y, z);
+                        if (baseBlock.getType().isSolid() && !baseBlock.isPassable()) {
+                            foundUpperY = y + 1;
+                            break;
+                        }
+                    }
 
-                    if (aboveBlock.isPassable() || aboveBlock.getType() == Material.AIR) {
-                        aboveBlock.setType(Material.POWDER_SNOW);
+                    Location playerBlockLoc = playerLoc.getBlock().getLocation();
+                    int px = playerBlockLoc.getBlockX();
+                    int py = playerBlockLoc.getBlockY();
+                    int pz = playerBlockLoc.getBlockZ();
+
+                    if (foundY != -1 && !(x == px && foundY == py && z == pz)) {
+                        Block aboveBlock = world.getBlockAt(x, foundY, z);
+                        if (aboveBlock.isPassable() || aboveBlock.getType() == Material.AIR) {
+                            aboveBlock.setType(Material.POWDER_SNOW);
+                        }
+                    }
+
+                    if (foundUpperY != -1 && foundUpperY != foundY && !(x == px && foundUpperY == py && z == pz)) {
+                        Block aboveBlock = world.getBlockAt(x, foundUpperY, z);
+                        if (aboveBlock.isPassable() || aboveBlock.getType() == Material.AIR) {
+                            aboveBlock.setType(Material.POWDER_SNOW);
+                        }
                     }
                 }
             }

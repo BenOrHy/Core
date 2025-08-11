@@ -39,7 +39,7 @@ public class F implements SkillBase {
             World world = player.getWorld();
             Location center = player.getLocation().clone();
 
-            SetBiome(world, center, 12);
+            SetBiome(world, center, 15);
 
             Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
             player.spawnParticle(Particle.DUST, center.add(0, 1, 0), 1000, 8, 8, 8, 0, dustOptions);
@@ -74,16 +74,22 @@ public class F implements SkillBase {
 
     }
 
-    public void SetBiome(World world, Location center, int radius){
-
+    public void SetBiome(World world, Location center, int radius) {
         int cx = center.getBlockX();
         int cy = center.getBlockY();
         int cz = center.getBlockZ();
 
+        int radiusSquared = radius * radius;
+
         for (int x = cx - radius; x <= cx + radius; x++) {
             for (int y = cy - radius; y <= cy + radius; y++) {
                 for (int z = cz - radius; z <= cz + radius; z++) {
-                    world.setBiome(x, y, z, Biome.SNOWY_PLAINS);
+                    int dx = x - cx;
+                    int dy = y - cy;
+                    int dz = z - cz;
+                    if (dx * dx + dy * dy + dz * dz <= radiusSquared) {
+                        world.setBiome(x, y, z, Biome.SNOWY_PLAINS);
+                    }
                 }
             }
         }
@@ -115,7 +121,8 @@ public class F implements SkillBase {
                             if (x * x + y * y + z * z > radiusSquared) continue;
 
                             Block block = world.getBlockAt(cx + x, cy + y, cz + z);
-                            if (block.getType() == Material.AIR) {
+
+                            if (block.isPassable() || block.getType() == Material.AIR) {
                                 block.setType(Material.BLUE_ICE);
                             }
                         }
