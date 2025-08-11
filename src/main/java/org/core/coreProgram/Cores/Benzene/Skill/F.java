@@ -103,9 +103,13 @@ public class F implements SkillBase {
 
                         double distanceFromOrigin = particleLocation.distance(origin);
                         Particle.DustOptions dustOption_slash = new Particle.DustOptions(Color.fromRGB(66, 66, 66), 0.6f);
+                        Particle.DustOptions dustOption_slash_gra = new Particle.DustOptions(Color.fromRGB(111, 111, 111), 0.6f);
 
                         if (distanceFromOrigin >= innerRadius) {
-                            world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOption_slash);
+                            world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOption_slash_gra);
+                            if (Math.random() < 0.33) {
+                                world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOption_slash);
+                            }
 
                             for (Entity entity : world.getNearbyEntities(particleLocation, 0.6, 0.6, 0.6)) {
                                 if (entity instanceof LivingEntity target && entity != player && !config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
@@ -185,7 +189,6 @@ public class F implements SkillBase {
 
                 teleportBehind(player, playerGameMode, entity, -5.0);
 
-                //double height = 0.3 - (0.15 * tick);
                 double height = - 0.2 * tick;
 
                 Slash(player, height);
@@ -267,14 +270,23 @@ public class F implements SkillBase {
                             world.spawnParticle(Particle.DUST, particleLocation.add(0, height, 0), 1, 0, 0, 0, 0, dustOptions);
                         }
 
+                        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 0, 0), 0.6f);
                         for (Entity entity : world.getNearbyEntities(particleLocation, 1.2, 1.2, 1.2)) {
-                            if (entity instanceof LivingEntity target && entity != player && !config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
+                            if (entity instanceof LivingEntity target && entity != player) {
 
-                                ForceDamage forceDamage = new ForceDamage(target, config.f_Skill_Damage * 3);
-                                forceDamage.applyEffect(player);
-                                target.setVelocity(new Vector(0, 0, 0));
+                                if(length >= innerRadius + 0.3) {
+                                    world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
+                                }
 
-                                config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).add(entity);
+                                if(!config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
+
+
+                                    ForceDamage forceDamage = new ForceDamage(target, config.f_Skill_Damage * 3);
+                                    forceDamage.applyEffect(player);
+                                    target.setVelocity(new Vector(0, 0, 0));
+
+                                    config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).add(entity);
+                                }
                             }
                         }
                     }

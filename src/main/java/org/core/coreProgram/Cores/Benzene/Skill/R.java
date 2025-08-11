@@ -80,8 +80,11 @@ public class R implements SkillBase {
                     return;
                 }
 
-                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(120, 120, 120), 0.6f);
-                player.getWorld().spawnParticle(Particle.DUST, player.getLocation().add(0, 1, 0), 120, 0.3, 0, 0.3, 0.08, dustOptions);
+                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(111, 111, 111), 0.6f);
+                player.getWorld().spawnParticle(Particle.DUST, player.getLocation().add(0, 1, 0), 111, 0.3, 0, 0.3, 0.08, dustOptions);
+
+                Particle.DustOptions dustOptions_small = new Particle.DustOptions(Color.fromRGB(66, 66, 66), 0.6f);
+                player.getWorld().spawnParticle(Particle.DUST, player.getLocation().add(0, 1, 0), 66, 0.3, 0, 0.3, 0.08, dustOptions_small);
 
                 List<Entity> nearbyEntities = player.getNearbyEntities(1.2, 1.2, 1.2);
                 for (Entity entity : nearbyEntities) {
