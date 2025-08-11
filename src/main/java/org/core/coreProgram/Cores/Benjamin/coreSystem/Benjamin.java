@@ -26,7 +26,7 @@ public class Benjamin {
     //R
     public HashMap<UUID, HashSet<Entity>> damaged = new HashMap<>();
     public HashMap<UUID, Boolean> rskill_using = new HashMap<>();
-    public double r_Skill_dash = 2.0;
+    public double r_Skill_dash = 1.5;
     public double r_Skill_damage = 2;
     public long r_Skill_Cool = 3000;
 

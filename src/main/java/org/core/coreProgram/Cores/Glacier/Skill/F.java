@@ -54,8 +54,8 @@ public class F implements SkillBase {
 
                 player.spawnParticle(Particle.EXPLOSION, entity.getLocation().clone().add(0, 1, 0), 1, 0, 0, 0, 0);
 
-                Vector direction = entity.getLocation().toVector().subtract(center.toVector()).normalize().multiply(2.6);
-                direction.setY(0.6);
+                Vector direction = entity.getLocation().toVector().subtract(center.toVector()).normalize().multiply(2.2);
+                direction.setY(0.4);
 
                 entity.setVelocity(direction);
             }
@@ -105,7 +105,7 @@ public class F implements SkillBase {
         World world = player.getWorld();
         int radiusSquared = radius * radius;
 
-        for (Entity rangeTarget : world.getNearbyEntities(player.getLocation(), 8.0, 8.0, 8.0)) {
+        for (Entity rangeTarget : world.getNearbyEntities(player.getLocation(), 15.0, 15.0, 15.0)) {
             if (rangeTarget instanceof LivingEntity target && rangeTarget != player) {
 
                 Location TLoc = target.getLocation().clone();

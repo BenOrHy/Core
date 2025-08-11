@@ -49,7 +49,7 @@ public class R implements SkillBase {
         player.setVelocity(direction);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f);
 
-        Invulnerable invulnerable = new Invulnerable(400);
+        Invulnerable invulnerable = new Invulnerable(600);
         invulnerable.applyEffect(player);
 
         detect(player);
@@ -67,7 +67,7 @@ public class R implements SkillBase {
             @Override
             public void run() {
 
-                if (ticks > 4 || player.isDead()) {
+                if (ticks > 6 || player.isDead()) {
                     config.rskill_using.remove(player.getUniqueId());
 
                     config.R_stack.remove(player.getUniqueId());
