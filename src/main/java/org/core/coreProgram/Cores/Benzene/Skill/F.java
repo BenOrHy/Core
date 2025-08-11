@@ -276,7 +276,6 @@ public class F implements SkillBase {
 
                                 if(!config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
 
-
                                     ForceDamage forceDamage = new ForceDamage(target, config.f_Skill_Damage * 3);
                                     forceDamage.applyEffect(player);
                                     target.setVelocity(new Vector(0, 0, 0));
