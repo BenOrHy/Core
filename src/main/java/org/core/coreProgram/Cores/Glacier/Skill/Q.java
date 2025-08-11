@@ -41,13 +41,14 @@ public class Q implements SkillBase {
     public void Trigger(Player player) {
         ItemStack offhandItem = player.getInventory().getItem(EquipmentSlot.OFF_HAND);
 
-        if (offhandItem.getType() == Material.BLUE_ICE && offhandItem.getAmount() >= 15) {
-            World world = player.getWorld();
+        if (offhandItem.getType() == Material.BLUE_ICE && offhandItem.getAmount() >= 7) {
 
+            player.spawnParticle(Particle.SNOWFLAKE, player.getLocation().clone().add(0, 1, 0), 80, 1.5, 1.5, 1.5, 0.1);
             player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
+            player.playSound(player.getLocation(), Sound.BLOCK_SNOW_BREAK, 1, 1);
             placePowderSnowCone(player, 8.0, 60.0);
 
-            offhandItem.setAmount(offhandItem.getAmount() - 15);
+            offhandItem.setAmount(offhandItem.getAmount() - 6);
         }else{
             player.playSound(player.getLocation(), Sound.BLOCK_GLASS_PLACE, 1, 1);
             player.sendActionBar(Component.text("Blue Ice needed").color(NamedTextColor.RED));
@@ -58,24 +59,22 @@ public class Q implements SkillBase {
 
     public void placePowderSnowCone(Player player, double radius, double angleDegrees) {
         Location playerLoc = player.getLocation();
-        World world = playerLoc.getWorld();
+        World world = player.getWorld();
 
         Vector forward = playerLoc.getDirection().setY(0).normalize();
-
         Vector origin = new Vector(playerLoc.getX() + 0.5, playerLoc.getY(), playerLoc.getZ() + 0.5);
 
         double halfAngleRad = Math.toRadians(angleDegrees / 2);
 
-        int minX = (int) Math.floor(playerLoc.getX() - radius);
-        int maxX = (int) Math.ceil(playerLoc.getX() + radius);
-        int minZ = (int) Math.floor(playerLoc.getZ() - radius);
-        int maxZ = (int) Math.ceil(playerLoc.getZ() + radius);
+        int minX = (int)Math.floor(playerLoc.getX() - radius);
+        int maxX = (int)Math.ceil(playerLoc.getX() + radius);
+        int minZ = (int)Math.floor(playerLoc.getZ() - radius);
+        int maxZ = (int)Math.ceil(playerLoc.getZ() + radius);
+        int playerY = playerLoc.getBlockY();
 
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
-                int y = world.getHighestBlockYAt(x, z) - 1;
-                Vector blockPos = new Vector(x + 0.5, y, z + 0.5);
-
+                Vector blockPos = new Vector(x + 0.5, playerY, z + 0.5);
                 Vector directionToBlock = blockPos.clone().subtract(origin);
                 directionToBlock.setY(0);
                 double distance = directionToBlock.length();
@@ -83,23 +82,25 @@ public class Q implements SkillBase {
                 if (distance == 0 || distance > radius) continue;
 
                 directionToBlock.normalize();
-
                 double dot = forward.dot(directionToBlock);
                 dot = Math.min(1.0, Math.max(-1.0, dot));
                 double angleBetween = Math.acos(dot);
 
                 if (angleBetween <= halfAngleRad) {
-                    Block block = world.getBlockAt(x, y, z);
-
-                    if (block.getType() == Material.AIR) {
-                        block.setType(Material.POWDER_SNOW);
-
-                        BlockData data = block.getBlockData();
-                        if (data instanceof Levelled) {
-                            Levelled levelled = (Levelled) data;
-                            levelled.setLevel(8);
-                            block.setBlockData(levelled);
+                    int targetY = -1;
+                    for (int y = playerY + 2; y >= playerY - 7; y--) {
+                        Block baseBlock = world.getBlockAt(x, y, z);
+                        if (baseBlock.getType().isSolid() && !baseBlock.isPassable()) {
+                            targetY = y + 1;
+                            break;
                         }
+                    }
+                    if (targetY == -1) continue;
+
+                    Block aboveBlock = world.getBlockAt(x, targetY, z);
+
+                    if (aboveBlock.isPassable() || aboveBlock.getType() == Material.AIR) {
+                        aboveBlock.setType(Material.POWDER_SNOW);
                     }
                 }
             }

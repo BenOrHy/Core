@@ -42,12 +42,12 @@ public class F implements SkillBase {
             SetBiome(world, center, 12);
 
             Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.6f);
-            player.spawnParticle(Particle.DUST, center.add(0, 2, 0), 1000, 8, 8, 8, 0, dustOptions);
+            player.spawnParticle(Particle.DUST, center.add(0, 1, 0), 1000, 8, 8, 8, 0, dustOptions);
 
-            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
+            player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
             player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
 
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BREEZE_SHOOT, 1.0f, 1.0f);
+            player.playSound(player.getLocation(), Sound.ENTITY_BREEZE_SHOOT, 1.0f, 1.0f);
 
             for (Entity entity : world.getNearbyEntities(center, 4, 4, 4)) {
                 if (entity.equals(player) || !(entity instanceof LivingEntity)) continue;
