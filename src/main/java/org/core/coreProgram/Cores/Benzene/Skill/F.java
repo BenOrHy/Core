@@ -108,7 +108,7 @@ public class F implements SkillBase {
 
                         if (distanceFromOrigin >= innerRadius) {
                             world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOption_slash_gra);
-                            if (Math.random() < 0.33) {
+                            if (Math.random() < 0.11) {
                                 world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOption_slash);
                             }
 
@@ -269,6 +269,10 @@ public class F implements SkillBase {
                         }else{
                             Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(66, 66, 66), 0.6f);
                             world.spawnParticle(Particle.DUST, particleLocation.add(0, height, 0), 1, 0, 0, 0, 0, dustOptions);
+                            if(Math.random() > 0.11){
+                                Particle.DustOptions dustOptions_gra = new Particle.DustOptions(Color.fromRGB(33, 33, 33), 0.6f);
+                                world.spawnParticle(Particle.DUST, particleLocation.add(0, height, 0), 1, 0, 0, 0, 0, dustOptions_gra);
+                            }
                         }
 
                         for (Entity entity : world.getNearbyEntities(particleLocation, 1.2, 1.2, 1.2)) {
