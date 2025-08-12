@@ -23,10 +23,12 @@ public class Knight {
 
     //R
     public HashMap<UUID, Integer> swordCount = new HashMap<>();
-    public double R_Skill_Damage = 4;
-    public long r_Skill_Cool = 400;
+    public double R_Skill_Damage = (double) 7 /3;
+    public long r_Skill_Cool = 300;
 
     //Q
+    public double q_Skill_Damage = 3;
+    public double max_Health_release = 3;
     public long q_Skill_Cool = 12000;
 
     //F
@@ -40,6 +42,8 @@ public class Knight {
         R_COOLDOWN.remove(player.getUniqueId());
         Q_COOLDOWN.remove(player.getUniqueId());
         F_COOLDOWN.remove(player.getUniqueId());
+
+        swordCount.remove(player.getUniqueId());
 
     }
 }
