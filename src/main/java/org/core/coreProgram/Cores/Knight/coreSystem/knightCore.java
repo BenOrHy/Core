@@ -2,6 +2,7 @@ package org.core.coreProgram.Cores.Knight.coreSystem;
 
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -9,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -51,6 +53,18 @@ public class knightCore extends absCore {
         getLogger().info("Knight downloaded...");
     }
 
+    public void respawnHealthSet(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        AttributeInstance maxHealth = player.getAttribute(Attribute.MAX_HEALTH);
+        if (maxHealth == null) return;
+
+        double originalMax = 20.0;
+        maxHealth.setBaseValue(originalMax);
+
+        player.setHealth(originalMax);
+    }
+
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void passiveAttackEffect(PlayerInteractEvent event) {
 
@@ -68,19 +82,6 @@ public class knightCore extends absCore {
                         }
 
                         cool.setCooldown(player, 625L, "cutting");
-
-                        ItemStack offHand = player.getInventory().getItemInOffHand();
-                        ItemMeta meta = offHand.getItemMeta();
-                        if (meta instanceof Damageable && offHand.getType().getMaxDurability() > 0) {
-                            Damageable damageable = (Damageable) meta;
-                            int newDamage = damageable.getDamage() + 1;
-                            damageable.setDamage(newDamage);
-                            offHand.setItemMeta(meta);
-
-                            if (newDamage >= offHand.getType().getMaxDurability()) {
-                                player.getInventory().setItemInMainHand(null);
-                            }
-                        }
 
                         World world = player.getWorld();
                         Location playerLocation = player.getLocation();
@@ -122,6 +123,19 @@ public class knightCore extends absCore {
                                 ticks++;
                             }
                         }.runTaskTimer(plugin, 0L, 1L);
+
+                        ItemStack offHand = player.getInventory().getItemInOffHand();
+                        ItemMeta meta = offHand.getItemMeta();
+                        if (meta instanceof Damageable && offHand.getType().getMaxDurability() > 0) {
+                            Damageable damageable = (Damageable) meta;
+                            int newDamage = damageable.getDamage() + 1;
+                            damageable.setDamage(newDamage);
+                            offHand.setItemMeta(meta);
+
+                            if (newDamage >= offHand.getType().getMaxDurability()) {
+                                player.getInventory().setItemInOffHand(null);
+                            }
+                        }
 
                         event.setCancelled(true);
                     }

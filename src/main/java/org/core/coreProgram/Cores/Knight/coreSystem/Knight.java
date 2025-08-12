@@ -27,14 +27,17 @@ public class Knight {
     public long r_Skill_Cool = 300;
 
     //Q
-    public double q_Skill_Damage = 3;
-    public double max_Health_release = 3;
+    public HashMap<UUID, Boolean> isFocusing = new HashMap<>();
+    public HashMap<UUID, Boolean> isFocusCancel = new HashMap<>();
+    public long q_Focus_Time = 2;
+    public double q_Skill_Damage = (double) 7 /3;
+    public double max_Health_release = 4;
     public long q_Skill_Cool = 12000;
 
     //F
     public HashMap<UUID, HashSet<Entity>> damaged = new HashMap<>();
     public double f_Skill_Damage = 15;
-    public long f_Skill_Cool = 10000;
+    public long f_Skill_Cool = 30000;
 
 
     public void variableReset(Player player){

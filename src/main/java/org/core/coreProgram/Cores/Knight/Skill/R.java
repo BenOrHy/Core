@@ -7,6 +7,8 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.RayTraceResult;
@@ -39,6 +41,11 @@ public class R implements SkillBase {
             Entity target = getTargetedEntity(player, 17, 0.3);
             if (target == null) return;
 
+            config.swordCount.put(player.getUniqueId(), config.swordCount.getOrDefault(player.getUniqueId(), 0)+1);
+            player.getWorld().spawnParticle(Particle.ENCHANTED_HIT, target.getLocation().clone().add(0, 1, 0), 49, 0.4, 0.4, 0.4, 1);
+            player.sendActionBar(Component.text(config.swordCount.getOrDefault(player.getUniqueId(), 0)).color(NamedTextColor.BLACK));
+            TripleSword(player, target);
+
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
             ItemStack offHand = player.getInventory().getItemInOffHand();
             ItemMeta meta = offHand.getItemMeta();
@@ -49,13 +56,10 @@ public class R implements SkillBase {
                 offHand.setItemMeta(meta);
 
                 if (newDamage >= offHand.getType().getMaxDurability()) {
-                    player.getInventory().setItemInMainHand(null);
+                    player.getInventory().setItemInOffHand(null);
                 }
             }
-            config.swordCount.put(player.getUniqueId(), config.swordCount.getOrDefault(player.getUniqueId(), 0)+1);
-            player.getWorld().spawnParticle(Particle.ENCHANTED_HIT, target.getLocation().clone().add(0, 1, 0), 49, 0.4, 0.4, 0.4, 1);
-            player.sendActionBar(Component.text(config.swordCount.getOrDefault(player.getUniqueId(), 0)).color(NamedTextColor.BLACK));
-            TripleSword(player, target);
+
         }else{
             player.sendActionBar(Component.text("Can use 3 times").color(NamedTextColor.RED));
             player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
@@ -225,6 +229,8 @@ public class R implements SkillBase {
                         player.playSound(e.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
                         ForceDamage forceDamage = new ForceDamage((LivingEntity) e, damage);
                         forceDamage.applyEffect(player);
+                        PotionEffect darkness = new PotionEffect(PotionEffectType.DARKNESS, 20 * 3, 1, false, true);
+                        ((LivingEntity) e).addPotionEffect(darkness);
                         sword.remove();
                         cancel();
                         break;
