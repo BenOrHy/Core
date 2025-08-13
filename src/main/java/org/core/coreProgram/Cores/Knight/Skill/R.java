@@ -74,7 +74,7 @@ public class R implements SkillBase {
         final World world = target.getWorld();
         final int swordCount = 3;
         final double radius = 7;
-        final double yOffset = 0;
+        final double yOffset = 0.3;
         final double projectileSpeed = 1.0;
         final double damage = config.R_Skill_Damage;
 
@@ -200,7 +200,7 @@ public class R implements SkillBase {
         Particle.DustOptions dustOption = new Particle.DustOptions(Color.fromRGB(0, 0, 0), 1.0f);
         Particle.DustOptions dustOption_gra = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0f);
 
-        final Location fixedTargetPos = target.getLocation().clone();
+        final Location fixedTargetPos = target.getLocation().clone().add(0, 0.3, 0);
 
         new BukkitRunnable() {
             Vector dir = null;
