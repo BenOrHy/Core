@@ -27,16 +27,15 @@ public class Knight {
     public long r_Skill_Cool = 300;
 
     //Q
+    public HashMap<UUID, Boolean> q_Skill_Using = new HashMap<>();
     public HashMap<UUID, Boolean> isFocusing = new HashMap<>();
     public HashMap<UUID, Boolean> isFocusCancel = new HashMap<>();
-    public long q_Focus_Time = 2;
-    public double q_Skill_Damage = (double) 7 /3;
-    public double max_Health_release = 4;
+    public double q_Skill_Damage = 7;
     public long q_Skill_Cool = 12000;
 
     //F
     public HashMap<UUID, HashSet<Entity>> damaged = new HashMap<>();
-    public double f_Skill_Damage = 15;
+    public double f_Skill_Damage = 17;
     public long f_Skill_Cool = 30000;
 
 
@@ -47,6 +46,9 @@ public class Knight {
         F_COOLDOWN.remove(player.getUniqueId());
 
         swordCount.remove(player.getUniqueId());
+
+        isFocusCancel.remove(player.getUniqueId());
+        isFocusing.remove(player.getUniqueId());
 
     }
 }

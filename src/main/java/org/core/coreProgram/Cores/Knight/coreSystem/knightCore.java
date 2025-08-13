@@ -6,14 +6,20 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.core.Cool.Cool;
@@ -53,6 +59,57 @@ public class knightCore extends absCore {
         getLogger().info("Knight downloaded...");
     }
 
+    @EventHandler
+    public void focusCancel(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        LivingEntity attacker = null;
+        Entity damager = event.getDamager();
+
+        if (damager instanceof LivingEntity) {
+            attacker = (LivingEntity) damager;
+        } else if (damager instanceof Projectile projectile) {
+            if (projectile.getShooter() instanceof LivingEntity shooter) {
+                attacker = shooter;
+            }
+        }
+
+        if (attacker == null) return;
+
+        if (tag.Knight.contains(player)) {
+            if (config.isFocusing.getOrDefault(player.getUniqueId(), false)) {
+                event.setCancelled(true);
+
+                if (!config.isFocusCancel.getOrDefault(player.getUniqueId(), false)) {
+
+                    Location playerLoc = player.getLocation();
+                    Vector dirToAttacker = attacker.getLocation().toVector()
+                            .subtract(player.getLocation().toVector())
+                            .normalize();
+                    playerLoc.setDirection(dirToAttacker);
+                    player.teleport(playerLoc);
+
+                    Vector knockback = dirToAttacker.multiply(1.4);
+                    damager.setVelocity(knockback);
+
+                    PotionEffect glowing = new PotionEffect(PotionEffectType.GLOWING, 20 * 3, 1, false, true);
+                    ((LivingEntity) attacker).addPotionEffect(glowing);
+
+                    player.spawnParticle(Particle.ENCHANTED_HIT, damager.getLocation().clone().add(0, 1, 0), 21, 0.4, 0.4, 0.4, 1);
+                    player.spawnParticle(Particle.SWEEP_ATTACK, damager.getLocation().clone().add(0, 1, 0), 1, 0., 0, 0, 0);
+
+                    player.playSound(playerLoc, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+                    player.playSound(playerLoc, Sound.ENTITY_IRON_GOLEM_REPAIR, 1, 1);
+
+                    config.isFocusCancel.put(player.getUniqueId(), true);
+                }
+            }
+        }
+    }
+
+
+
+    @EventHandler
     public void respawnHealthSet(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         AttributeInstance maxHealth = player.getAttribute(Attribute.MAX_HEALTH);
@@ -69,7 +126,7 @@ public class knightCore extends absCore {
     public void passiveAttackEffect(PlayerInteractEvent event) {
 
         if(tag.Knight.contains(event.getPlayer())) {
-            if (!skillUsing.contains(event.getPlayer().getUniqueId())) {
+            if (!skillUsing.contains(event.getPlayer().getUniqueId()) && !config.q_Skill_Using.getOrDefault(event.getPlayer().getUniqueId(), false)) {
 
                 Player player = event.getPlayer();
 

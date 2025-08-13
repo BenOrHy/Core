@@ -81,7 +81,8 @@ public class R implements SkillBase {
         final List<ArmorStand> swords = new ArrayList<>();
         final List<Double> baseAngles = new ArrayList<>();
         final List<Location> prevHiltLocations = new ArrayList<>();
-        Particle.DustOptions dustOption = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 0.7f);
+        Particle.DustOptions dustOption = new Particle.DustOptions(Color.fromRGB(0, 0, 0), 0.7f);
+        Particle.DustOptions dustOption_gra = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 0.7f);
 
         Location center = target.getLocation();
         for (int i = 0; i < swordCount; i++) {
@@ -153,7 +154,11 @@ public class R implements SkillBase {
                     newLoc.setPitch(pitch);
 
                     Location prevHilt = prevHiltLocations.get(i);
-                    spawnParticleTrail(world, prevHilt, newLoc, Particle.DUST, dustOption);
+                    if(Math.random() < 0.17) {
+                        spawnParticleTrail(world, prevHilt, newLoc, Particle.DUST, dustOption_gra);
+                    }else{
+                        spawnParticleTrail(world, prevHilt, newLoc, Particle.DUST, dustOption);
+                    }
 
                     swords.get(i).teleport(newLoc);
                     prevHiltLocations.set(i, newLoc.clone());
@@ -192,7 +197,8 @@ public class R implements SkillBase {
 
     private void launchSwordProjectile(Player player, ArmorStand sword, Entity target, double speed, double damage, JavaPlugin plugin) {
 
-        Particle.DustOptions dustOption = new Particle.DustOptions(Color.fromRGB(0, 255, 255), 1.0f);
+        Particle.DustOptions dustOption = new Particle.DustOptions(Color.fromRGB(0, 0, 0), 1.0f);
+        Particle.DustOptions dustOption_gra = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0f);
 
         final Location fixedTargetPos = target.getLocation().clone();
 
@@ -221,7 +227,11 @@ public class R implements SkillBase {
 
                 Location swordLoc = sword.getLocation().clone();
                 Location hiltLoc = swordLoc.clone().add(0, 0.7, 0);
-                sword.getWorld().spawnParticle(Particle.DUST, hiltLoc, 1, 0, 0, 0, 0, dustOption);
+                if(Math.random() < 0.17) {
+                    sword.getWorld().spawnParticle(Particle.DUST, hiltLoc, 1, 0, 0, 0, 0, dustOption_gra);
+                }else{
+                    sword.getWorld().spawnParticle(Particle.DUST, hiltLoc, 1, 0, 0, 0, 0, dustOption);
+                }
 
                 for (Entity e : sword.getNearbyEntities(0.7, 0.7, 0.7)) {
                     if (e != player && e instanceof LivingEntity) {

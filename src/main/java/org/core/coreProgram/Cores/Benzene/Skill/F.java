@@ -211,7 +211,6 @@ public class F implements SkillBase {
         double maxAngle = Math.toRadians(36);
         long tickDelay = 0L;
         int maxTicks = 3;
-
         double innerRadius = 5.0;
 
         Random rand = new Random();

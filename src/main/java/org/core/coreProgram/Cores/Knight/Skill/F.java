@@ -48,6 +48,9 @@ public class F implements SkillBase {
         Location origin = player.getEyeLocation().add(0, -0.5, 0);
         Vector direction = player.getLocation().getDirection().clone().setY(0).normalize();
 
+        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 0, 0), 0.7f);
+        Particle.DustOptions dustOptions_gra = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 0.7f);
+
         new BukkitRunnable() {
             int ticks = 0;
 
@@ -84,8 +87,11 @@ public class F implements SkillBase {
                         double distanceFromOrigin = particleLocation.distance(origin);
 
                         if (distanceFromOrigin >= innerRadius) {
-                            Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(0, 0, 0), 0.7f);
-                            world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
+                            if(Math.random() < 0.17){
+                                world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions_gra);
+                            }else{
+                                world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
+                            }
 
                             for (Entity entity : world.getNearbyEntities(particleLocation, 0.7, 0.7, 0.7)) {
                                 if (entity instanceof LivingEntity target && entity != player && !config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
