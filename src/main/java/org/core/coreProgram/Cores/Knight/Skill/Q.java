@@ -240,7 +240,7 @@ public class Q implements SkillBase {
                         );
                         world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
 
-                        for (Entity entity : world.getNearbyEntities(particleLocation, 1.2, 1.2, 1.2)) {
+                        for (Entity entity : world.getNearbyEntities(particleLocation, 0.7, 0.7, 0.7)) {
                             if (entity instanceof LivingEntity target && entity != player) {
                                 if(!config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
                                     ForceDamage forceDamage = new ForceDamage(target, config.q_Skill_Damage);

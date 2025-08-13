@@ -28,6 +28,8 @@ import org.core.coreProgram.Cores.Glacier.coreSystem.Glacier;
 import org.core.coreProgram.Cores.Glacier.coreSystem.glaCore;
 import org.core.coreProgram.Cores.Knight.coreSystem.Knight;
 import org.core.coreProgram.Cores.Knight.coreSystem.knightCore;
+import org.core.coreProgram.Cores.Luster.coreSystem.Luster;
+import org.core.coreProgram.Cores.Luster.coreSystem.lustCore;
 import org.core.coreProgram.Cores.Pyro.coreSystem.Pyro;
 import org.core.coreProgram.Cores.Pyro.coreSystem.pyroCore;
 
@@ -44,6 +46,7 @@ public final class Core extends JavaPlugin {
     private pyroCore pyro;
     private glaCore glacier;
     private knightCore knight;
+    private lustCore luster;
 
     public static Core getInstance() {
         return instance;
@@ -63,6 +66,7 @@ public final class Core extends JavaPlugin {
         Pyro pyroConfig = new Pyro();
         Glacier glaConfig = new Glacier();
         Knight knightConfig = new Knight();
+        Luster lustConfig = new Luster();
 
         Cool cool = new Cool(this);
 
@@ -91,6 +95,9 @@ public final class Core extends JavaPlugin {
 
         this.knight = new knightCore(this, config, knightConfig, cool);
         Bukkit.getPluginManager().registerEvents(this.knight, this);
+
+        this.luster = new lustCore(this, config, lustConfig, cool);
+        Bukkit.getPluginManager().registerEvents(this.luster, this);
 
         getLogger().info("Cores downloaded!");
     }
