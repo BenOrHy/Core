@@ -105,6 +105,8 @@ public class Q implements SkillBase {
                             }
                         }
 
+                        resetTargetMaxHealth(target, originalMax);
+
                         cool.updateCooldown(player, "Focus", 0L);
                         cool.updateCooldown(player, "Q", 3000L);
                     }

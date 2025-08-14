@@ -85,6 +85,9 @@ public class R implements SkillBase {
         Particle.DustOptions dustOption_gra = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 0.7f);
 
         Location center = target.getLocation();
+
+        world.playSound(center, Sound.ENTITY_WITHER_SHOOT, 1, 1);
+
         for (int i = 0; i < swordCount; i++) {
             double angle = 2 * Math.PI / swordCount * i;
             baseAngles.add(angle);
