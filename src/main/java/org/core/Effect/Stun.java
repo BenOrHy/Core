@@ -1,5 +1,7 @@
 package org.core.Effect;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -33,11 +35,16 @@ public class Stun implements Effects, Listener {
 
         long endTime = System.currentTimeMillis() + duration;
 
+
         new BukkitRunnable() {
             @Override
             public void run() {
                 stunnedEntities.put(target, endTime);
                 livingEntity.setAI(false);
+
+                if (target instanceof Player) {
+                    target.sendActionBar(Component.text("Stunned").color(NamedTextColor.YELLOW));
+                }
 
                 if (System.currentTimeMillis() >= endTime) {
                     removeEffect(target);

@@ -17,7 +17,8 @@ public class Luster {
     public HashMap<UUID, Boolean> collision = new HashMap<>();
 
     //R
-    public long r_Skill_Cool = 600;
+    public double r_Skill_Damage = 13;
+    public long r_Skill_Cool = 13000;
 
     //Q
     public long q_Skill_Cool = 10000;
