@@ -1,4 +1,4 @@
-package org.core.coreProgram.Cores.Benjamin.coreSystem;
+package org.core.coreProgram.Cores.Nox.coreSystem;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -6,7 +6,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class Benjamin {
+public class Nox {
 
     //CoolHashmap
     public HashMap<UUID, Long> R_COOLDOWN = new HashMap<>();
@@ -16,8 +16,8 @@ public class Benjamin {
     public long frozenCool = 10000;
 
     //passive
-    public final Map<UUID, BukkitRunnable> reinforcing = new HashMap<>();
-    public HashMap<UUID, Double> Ampli = new HashMap<>();
+    public final Map<UUID, BukkitRunnable> skillDream = new HashMap<>();
+    public HashMap<UUID, Double> Amplify = new HashMap<>();
 
     public HashMap<UUID, Double> R_stack = new HashMap<>();
     public HashMap<UUID, Double> Q_stack = new HashMap<>();

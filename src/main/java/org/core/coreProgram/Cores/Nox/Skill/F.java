@@ -1,4 +1,4 @@
-package org.core.coreProgram.Cores.Benjamin.Skill;
+package org.core.coreProgram.Cores.Nox.Skill;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -15,23 +15,23 @@ import org.bukkit.util.Vector;
 import org.core.Cool.Cool;
 import org.core.Effect.ForceDamage;
 import org.core.coreProgram.Abs.SkillBase;
-import org.core.coreProgram.Cores.Benjamin.Passive.HardSlash;
-import org.core.coreProgram.Cores.Benjamin.coreSystem.Benjamin;
+import org.core.coreProgram.Cores.Nox.Passive.Dream;
+import org.core.coreProgram.Cores.Nox.coreSystem.Nox;
 
 import java.util.*;
 
 public class F implements SkillBase {
 
-    private final Benjamin config;
+    private final Nox config;
     private final JavaPlugin plugin;
     private final Cool cool;
-    private final HardSlash hardSlash;
+    private final Dream dream;
 
-    public F(Benjamin config, JavaPlugin plugin, Cool cool, HardSlash hardSlash) {
+    public F(Nox config, JavaPlugin plugin, Cool cool, Dream dream) {
         this.config = config;
         this.plugin = plugin;
         this.cool = cool;
-        this.hardSlash = hardSlash;
+        this.dream = dream;
     }
 
     @Override

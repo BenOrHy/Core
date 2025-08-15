@@ -4,20 +4,17 @@ import com.destroystokyo.paper.event.entity.EntityJumpEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.core.Cool.Cool;
 import org.core.Effect.Grounding;
 import org.core.Effect.Stun;
 import org.core.coreProgram.Cores.Bambo.coreSystem.Bambo;
 import org.core.coreProgram.Cores.Bambo.coreSystem.bambCore;
-import org.core.coreProgram.Cores.Benjamin.coreSystem.Benjamin;
-import org.core.coreProgram.Cores.Benjamin.coreSystem.benCore;
+import org.core.coreProgram.Cores.Nox.coreSystem.Nox;
+import org.core.coreProgram.Cores.Nox.coreSystem.noxCore;
 import org.core.coreProgram.Cores.Benzene.coreSystem.Benzene;
 import org.core.coreProgram.Cores.Benzene.coreSystem.benzCore;
 import org.core.coreProgram.Cores.Carpenter.coreSystem.Carpenter;
@@ -38,7 +35,7 @@ public final class Core extends JavaPlugin {
     private coreConfig config;
 
     private static Core instance;
-    private benCore ben;
+    private noxCore nox;
     private benzCore benz;
     private bambCore bamb;
     private carpCore carp;
@@ -58,7 +55,7 @@ public final class Core extends JavaPlugin {
 
         instance = this;
 
-        Benjamin benConfig = new Benjamin();
+        Nox noxConfig = new Nox();
         Benzene benzConfig = new Benzene();
         Bambo bambConfig = new Bambo();
         Carpenter carpConfig = new Carpenter();
@@ -72,8 +69,8 @@ public final class Core extends JavaPlugin {
 
         this.config = new coreConfig(this);
 
-        this.ben  = new benCore(this, this.config, benConfig, cool);
-        Bukkit.getPluginManager().registerEvents(this.ben, this);
+        this.nox = new noxCore(this, this.config, noxConfig, cool);
+        Bukkit.getPluginManager().registerEvents(this.nox, this);
 
         this.benz = new benzCore(this, this.config, benzConfig, cool);
         Bukkit.getPluginManager().registerEvents(this.benz, this);

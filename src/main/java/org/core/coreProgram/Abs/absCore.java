@@ -117,6 +117,4 @@ public abstract class absCore implements Listener {
         cool.setCooldown(player, getConfigWrapper().getFcooldown(player), "F");
         getFSkill().Trigger(player);
     }
-
-
 }

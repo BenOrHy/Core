@@ -1,17 +1,9 @@
-package org.core.coreProgram.Cores.Benjamin.coreSystem;
+package org.core.coreProgram.Cores.Nox.coreSystem;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,44 +13,41 @@ import org.core.coreConfig;
 import org.core.coreProgram.Abs.ConfigWrapper;
 import org.core.coreProgram.Abs.SkillBase;
 import org.core.coreProgram.Abs.absCore;
-import org.core.coreProgram.Cores.Benjamin.Passive.HardSlash;
-import org.core.coreProgram.Cores.Benjamin.Skill.F;
-import org.core.coreProgram.Cores.Benjamin.Skill.Q;
-import org.core.coreProgram.Cores.Benjamin.Skill.R;
-import org.core.coreProgram.Cores.Benjamin.coreSystem.Benjamin;
-
-import java.util.LinkedHashMap;
+import org.core.coreProgram.Cores.Nox.Passive.Dream;
+import org.core.coreProgram.Cores.Nox.Skill.F;
+import org.core.coreProgram.Cores.Nox.Skill.Q;
+import org.core.coreProgram.Cores.Nox.Skill.R;
 
 import static org.bukkit.Bukkit.getLogger;
 
-public class benCore extends absCore {
+public class noxCore extends absCore {
     private final Core plugin;
-    private final Benjamin config;
+    private final Nox config;
 
-    private final HardSlash hardSlash;
+    private final Dream dream;
 
     private final R Rskill;
     private final Q Qskill;
     private final F Fskill;
 
-    public benCore(Core plugin, coreConfig tag, Benjamin config, Cool cool) {
+    public noxCore(Core plugin, coreConfig tag, Nox config, Cool cool) {
         super(tag, cool);
 
         this.plugin = plugin;
         this.config = config;
 
-        this.hardSlash = new HardSlash(config, tag, plugin, cool);
+        this.dream = new Dream(config, tag, plugin, cool);
 
-        this.Rskill = new R(config, plugin, cool, hardSlash);
-        this.Qskill = new Q(config, plugin, cool, hardSlash);
-        this.Fskill = new F(config, plugin, cool, hardSlash);
+        this.Rskill = new R(config, plugin, cool, dream);
+        this.Qskill = new Q(config, plugin, cool, dream);
+        this.Fskill = new F(config, plugin, cool, dream);
 
         getLogger().info("Benjamin downloaded...");
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void passiveAttackEffect(PlayerInteractEvent event) {
-        if(tag.Benjamin.contains(event.getPlayer())){
+        if(tag.Nox.contains(event.getPlayer())){
             if (skillUsing.contains(event.getPlayer().getUniqueId())) {
                 skillUsing.remove(event.getPlayer().getUniqueId());
             }
@@ -69,15 +58,12 @@ public class benCore extends absCore {
     public void reinforce(PlayerMoveEvent event){
         Player player = event.getPlayer();
 
-        if(!config.reinforcing.containsKey(player.getUniqueId()) && tag.Benjamin.contains(player)) {
-            hardSlash.slashReinforcer(player);
-            hardSlash.updateReinforceList(player);
-        }
+
     }
 
     @Override
     protected boolean contains(Player player) {
-        return tag.Benjamin.contains(player);
+        return tag.Nox.contains(player);
     }
 
     @Override
