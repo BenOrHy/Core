@@ -65,8 +65,6 @@ public class R implements SkillBase {
 
                 if (ticks > 6 || player.isDead()) {
                     config.rskill_using.remove(player.getUniqueId());
-
-                    config.R_stack.remove(player.getUniqueId());
                     config.damaged.remove(player.getUniqueId());
                     cancel();
                     return;
@@ -78,7 +76,7 @@ public class R implements SkillBase {
                 List<Entity> nearbyEntities = player.getNearbyEntities(0.6, 0.6, 0.6);
                 for (Entity entity : nearbyEntities) {
                     if (entity instanceof LivingEntity target && entity != player && !config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
-                        ForceDamage forceDamage = new ForceDamage(target, config.r_Skill_damage * config.R_stack.getOrDefault(player.getUniqueId(), 1.0));
+                        ForceDamage forceDamage = new ForceDamage(target, config.r_Skill_damage);
                         forceDamage.applyEffect(player);
                         config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).add(target);
                         target.setVelocity(new Vector(0, 0, 0));

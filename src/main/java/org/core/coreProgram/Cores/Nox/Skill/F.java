@@ -52,9 +52,6 @@ public class F implements SkillBase {
             Special_Attack(player, firstLocation, playerGameMode, target, config.F_stack.getOrDefault(player.getUniqueId(), 1.0));
         }else{
             world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_WEAK, 1, 1);
-
-            player.sendActionBar(Component.text("not designated").color(NamedTextColor.GRAY));
-
             long cools = 250L;
             cool.updateCooldown(player, "F", cools);
         }
@@ -104,8 +101,6 @@ public class F implements SkillBase {
             public void run() {
                 if (tick >= num || player.isDead()) {
                     config.damaged.remove(player.getUniqueId());
-                    config.F_stack.remove(player.getUniqueId());
-
                     config.fskill_using.remove(player.getUniqueId());
 
                     if(!isSafe(player.getLocation())){
@@ -157,13 +152,6 @@ public class F implements SkillBase {
 
         Location origin = player.getEyeLocation().add(0, -0.6, 0);
         Vector direction = player.getLocation().getDirection().clone().setY(0).normalize();
-
-        if(config.R_stack.getOrDefault(player.getUniqueId(), 0.0) < 6.0) {
-            config.R_stack.put(player.getUniqueId(), config.R_stack.getOrDefault(player.getUniqueId(), 1.0) + 1.0);
-        }
-        if(config.Q_stack.getOrDefault(player.getUniqueId(), 0.0) < 6.0) {
-            config.Q_stack.put(player.getUniqueId(), config.Q_stack.getOrDefault(player.getUniqueId(), 1.0) + 1.0);
-        }
 
         new BukkitRunnable() {
             int ticks = 0;

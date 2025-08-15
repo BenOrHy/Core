@@ -1,5 +1,6 @@
 package org.core.coreProgram.Cores.Nox.coreSystem;
 
+import it.unimi.dsi.fastutil.Hash;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,11 +18,7 @@ public class Nox {
 
     //passive
     public final Map<UUID, BukkitRunnable> skillDream = new HashMap<>();
-    public HashMap<UUID, Double> Amplify = new HashMap<>();
-
-    public HashMap<UUID, Double> R_stack = new HashMap<>();
-    public HashMap<UUID, Double> Q_stack = new HashMap<>();
-    public HashMap<UUID, Double> F_stack = new HashMap<>();
+    public HashMap<UUID, HashMap<String, Double>> dreamPoint = new HashMap<>();
 
     //R
     public HashMap<UUID, HashSet<Entity>> damaged = new HashMap<>();
@@ -47,10 +44,6 @@ public class Nox {
         R_COOLDOWN.remove(player.getUniqueId());
         Q_COOLDOWN.remove(player.getUniqueId());
         F_COOLDOWN.remove(player.getUniqueId());
-
-        R_stack.remove(player.getUniqueId());
-        Q_stack.remove(player.getUniqueId());
-        F_stack.remove(player.getUniqueId());
 
         damaged.remove(player.getUniqueId());
         damaged_2.remove(player.getUniqueId());

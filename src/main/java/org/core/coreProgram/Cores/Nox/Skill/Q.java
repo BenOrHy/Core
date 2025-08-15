@@ -31,77 +31,35 @@ public class Q implements SkillBase {
 
     @Override
     public void Trigger(Player player) {
-
-        config.qskill_using.put(player.getUniqueId(), true);
-
-        player.swingMainHand();
         World world = player.getWorld();
-        world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
 
-        double slashLength = 4.4;
-        double maxAngle = Math.toRadians(50);
-        long tickDelay = 0L;
-        int maxTicks = 5;
-        double innerRadius = 2.2;
+        world.spawnParticle(Particle.ENCHANTED_HIT, player.getLocation().clone().add(0, 1.2, 0), 33, 0.6, 0.6, 0.6, 1);
 
-        config.damaged_1.put(player.getUniqueId(), new HashSet<>());
+        Location start = player.getLocation().clone();
 
-        Location origin = player.getEyeLocation().add(0, -0.6, 0);
-        Vector direction = player.getLocation().getDirection().clone().setY(0).normalize();
+        Vector direction = start.getDirection().normalize();
+        Location end = start.clone().add(direction.clone().multiply(6));
 
-        new BukkitRunnable() {
-            int ticks = 0;
+        player.teleport(end);
 
-            @Override
-            public void run() {
+        double step = 0.5;
 
-                if (ticks >= maxTicks || player.isDead()) {
-
-                    config.qskill_using.remove(player.getUniqueId());
-
-                    config.Q_stack.remove(player.getUniqueId());
-
-                    this.cancel();
-                    return;
+        for (double i = 0; i <= 6; i += step) {
+            Location point = start.clone().add(direction.clone().multiply(i));
+            for (Entity entity : world.getNearbyEntities(point, 1.2, 1.2, 1.2)) {
+                if (entity instanceof LivingEntity target && entity != player) {
+                    ForceDamage forceDamage = new ForceDamage(target, config.q_Skill_damage);
+                    forceDamage.applyEffect(player);
                 }
-
-                double progress = (ticks + 1) * (maxAngle * 2 / maxTicks) - maxAngle;
-                Vector rotatedDir = direction.clone().rotateAroundY(progress);
-
-                for (double length = 0; length <= slashLength; length += 0.1) {
-                    for (double angle = -maxAngle; angle <= maxAngle; angle += Math.toRadians(2)) {
-                        Vector angleDir = rotatedDir.clone().rotateAroundY(angle);
-                        Vector particleOffset = angleDir.clone().multiply(length);
-
-                        Location particleLocation = origin.clone().add(particleOffset);
-
-                        double distanceFromOrigin = particleLocation.distance(origin);
-
-                        if (distanceFromOrigin >= innerRadius) {
-                            if(length < innerRadius + 0.3){
-                                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(66, 66, 66), 0.4f);
-                                world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
-                            }else if(length < innerRadius + 1.2){
-                                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(88, 88, 88), 0.4f);
-                                world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
-                            }else{
-                                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(110, 110, 110), 0.4f);
-                                world.spawnParticle(Particle.DUST, particleLocation, 1, 0, 0, 0, 0, dustOptions);
-                            }
-
-                            for (Entity entity : world.getNearbyEntities(particleLocation, 0.6, 0.6, 0.6)) {
-                                if (entity instanceof LivingEntity target && entity != player && !config.damaged_1.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
-                                    config.damaged_1.getOrDefault(player.getUniqueId(), new HashSet<>()).add(entity);
-                                    ForceDamage forceDamage = new ForceDamage(target, config.q_Skill_damage * config.Q_stack.getOrDefault(player.getUniqueId(), 1.0));
-                                    forceDamage.applyEffect(player);
-                                    target.setVelocity(new Vector(0, 0, 0));
-                                }
-                            }
-                        }
-                    }
-                }
-                ticks++;
             }
-        }.runTaskTimer(plugin, tickDelay, 1L);
+        }
+
+        for (double i = 0; i <= 6; i += step) {
+            Location point = start.clone().add(direction.clone().multiply(i));
+            world.spawnParticle(Particle.CRIT, point, 1, 0, 0, 0, 0);
+        }
+
+        world.playSound(start, Sound.ENTITY_WITHER_SHOOT, 1f, 1f);
     }
+
 }
