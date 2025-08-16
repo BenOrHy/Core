@@ -23,20 +23,19 @@ public class Nox {
     //R
     public HashMap<UUID, HashSet<Entity>> damaged = new HashMap<>();
     public HashMap<UUID, Boolean> rskill_using = new HashMap<>();
-    public double r_Skill_dash = 1.5;
+    public double r_Skill_dash = 1.6;
     public double r_Skill_damage = 2;
     public long r_Skill_Cool = 3000;
 
     //Q
-    public HashMap<UUID, HashSet<Entity>> damaged_1 = new HashMap<>();
     public HashMap<UUID, Boolean> qskill_using = new HashMap<>();
-    public double q_Skill_damage = 2;
+    public double q_Skill_damage = 1;
     public long q_Skill_Cool = 2000;
 
     //F
     public HashMap<UUID, HashSet<Entity>> damaged_2 = new HashMap<>();
     public HashMap<UUID, Boolean> fskill_using = new HashMap<>();
-    public double f_Skill_damage = 6;
+    public double f_Skill_damage = 1;
     public long f_Skill_Cool = 2000;
 
     public void variableReset(Player player){

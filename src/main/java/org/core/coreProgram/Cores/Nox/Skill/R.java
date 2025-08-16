@@ -17,6 +17,7 @@ import org.core.coreProgram.Abs.SkillBase;
 import org.core.coreProgram.Cores.Nox.Passive.Dream;
 import org.core.coreProgram.Cores.Nox.coreSystem.Nox;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -66,6 +67,8 @@ public class R implements SkillBase {
                 if (ticks > 6 || player.isDead()) {
                     config.rskill_using.remove(player.getUniqueId());
                     config.damaged.remove(player.getUniqueId());
+
+                    dream.wanderersDream(player, "R");
                     cancel();
                     return;
                 }
@@ -76,7 +79,7 @@ public class R implements SkillBase {
                 List<Entity> nearbyEntities = player.getNearbyEntities(0.6, 0.6, 0.6);
                 for (Entity entity : nearbyEntities) {
                     if (entity instanceof LivingEntity target && entity != player && !config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).contains(entity)) {
-                        ForceDamage forceDamage = new ForceDamage(target, config.r_Skill_damage);
+                        ForceDamage forceDamage = new ForceDamage(target, config.r_Skill_damage * config.dreamPoint.getOrDefault(player.getUniqueId(), new HashMap<>()).getOrDefault("R", 1.0));
                         forceDamage.applyEffect(player);
                         config.damaged.getOrDefault(player.getUniqueId(), new HashSet<>()).add(target);
                         target.setVelocity(new Vector(0, 0, 0));

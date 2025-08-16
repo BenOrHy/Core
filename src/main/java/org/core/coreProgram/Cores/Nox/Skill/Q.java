@@ -13,6 +13,7 @@ import org.core.coreProgram.Abs.SkillBase;
 import org.core.coreProgram.Cores.Nox.Passive.Dream;
 import org.core.coreProgram.Cores.Nox.coreSystem.Nox;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Q implements SkillBase {
@@ -48,7 +49,7 @@ public class Q implements SkillBase {
             Location point = start.clone().add(direction.clone().multiply(i));
             for (Entity entity : world.getNearbyEntities(point, 1.2, 1.2, 1.2)) {
                 if (entity instanceof LivingEntity target && entity != player) {
-                    ForceDamage forceDamage = new ForceDamage(target, config.q_Skill_damage);
+                    ForceDamage forceDamage = new ForceDamage(target, config.q_Skill_damage * config.dreamPoint.getOrDefault(player.getUniqueId(), new HashMap<>()).getOrDefault("Q", 1.0));
                     forceDamage.applyEffect(player);
                 }
             }
@@ -60,6 +61,7 @@ public class Q implements SkillBase {
         }
 
         world.playSound(start, Sound.ENTITY_WITHER_SHOOT, 1f, 1f);
+        dream.wanderersDream(player, "Q");
     }
 
 }
