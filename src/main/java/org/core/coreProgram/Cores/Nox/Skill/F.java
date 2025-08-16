@@ -49,7 +49,7 @@ public class F implements SkillBase {
         if(target != null){
             player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_KNOCKBACK, 1.0f, 1.0f);
 
-            Special_Attack(player, firstLocation, playerGameMode, target, config.F_stack.getOrDefault(player.getUniqueId(), 1.0));
+            //Special_Attack(player, firstLocation, playerGameMode, target, config.F_stack.getOrDefault(player.getUniqueId(), 1.0));
         }else{
             world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_WEAK, 1, 1);
             long cools = 250L;
